@@ -1,4 +1,4 @@
-package com.kyu.mail;
+package com.kyu.mail.test;
 
 import java.util.Properties;
 
@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.kyu.common.Conf;
+import com.kyu.mail.SMTPAuthenticator;
 
 public class SimpleMailTest {
 
