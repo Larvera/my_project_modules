@@ -58,7 +58,7 @@ public class SimpleMailTest {
 		messageBodyPart = new MimeBodyPart();
 		DataSource fds = new FileDataSource("E:\\test\\mail\\allpopup.jpg");
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "<image>");
+		messageBodyPart.setHeader("Content-ID", "image");
 		messageBodyPart.setFileName(fds.getName());
 
 		// add it

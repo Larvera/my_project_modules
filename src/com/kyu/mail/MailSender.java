@@ -1,8 +1,13 @@
 package com.kyu.mail;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -61,19 +66,17 @@ public class MailSender {
 			configureMessage(mailVO, message);
 
 			// 속봉투
-			MimeMultipart multipart = new MimeMultipart("related"); // html 메시지를 나타내는 부분과 이미지를 나타내는 부분으로 구성되는 multi-part메시지 생성
+			MimeMultipart mimeMultipart = new MimeMultipart("related"); // html 메시지를 나타내는 부분과 이미지를 나타내는 부분으로 구성되는 multi-part메시지 생성
 
-			// 보낼 메시지 셋팅
-			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(mailVO.getHtmlText(), "text/html");
-			multipart.addBodyPart(messageBodyPart);
+			// 보낼 메세지 생성
+			makeBodyPart(mailVO.getHtmlUrl(), mailVO.getHtmlText(), mimeMultipart);
 
-			// 보낼 파일 셋팅
+			// 첨부 파일 셋팅
 			if (mailVO.getAttachedFiles().isEmpty() == false) {
-				attachFiles(mailVO, multipart);
+				attachFiles(mailVO, mimeMultipart);
 			}
 
-			message.setContent(multipart);
+			message.setContent(mimeMultipart);
 			Transport.send(message);
 
 		} catch (Exception ex) {
@@ -82,6 +85,60 @@ public class MailSender {
 		}
 
 		return isSuccess;
+	}
+
+	/**
+	 * <pre>
+	 * makeBodyPart
+	 * 본문 내용 생성
+	 * <pre>
+	 * @param htmlUrl
+	 * @param htmlbody
+	 * @param mimeMultipart
+	 * @throws Exception
+	 */
+	private static void makeBodyPart(URL htmlUrl, String htmlbody, MimeMultipart mimeMultipart) throws Exception {
+		HashMap<String, String> cidMap = new HashMap<String, String>();
+		BodyPart messageBodyPart = new MimeBodyPart();
+
+		Pattern p = Pattern.compile("<img.*?src\\s*=\\s*['\"](.*?)['\"]", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(htmlbody);
+
+		StringBuilder copiedHtml = new StringBuilder();
+		int curpos = 0;
+		int cidCnt = 1;
+		while (m.find()) {
+			String imgSrc = m.group(1);
+			int start = m.start(1);
+			int end = m.end(1);
+
+			URL url = new URL(htmlUrl, imgSrc);
+			String cid = "identifiler" + String.valueOf(cidCnt++);
+			copiedHtml.append(htmlbody.substring(curpos, start));
+			copiedHtml.append("cid:").append(cid);
+			curpos = end;
+			cidMap.put(cid, url.getPath());
+		}
+
+		copiedHtml.append(htmlbody.substring(curpos));
+		messageBodyPart.setContent(copiedHtml.toString(), "text/html");
+		mimeMultipart.addBodyPart(messageBodyPart); // 본문 내용 추가
+
+		Iterator<String> keyIter = cidMap.keySet().iterator();
+		while (keyIter.hasNext()) {
+			String cid = keyIter.next();
+			String path = cidMap.get(cid);
+
+			System.out.println("cid : " + cid);
+			System.out.println("path : " + path);
+
+			BodyPart messageBodyAttachPart = new MimeBodyPart();
+            DataSource source = new FileDataSource(path);
+            messageBodyAttachPart.setDataHandler(new DataHandler(source));
+            messageBodyAttachPart.setHeader("Content-ID", cid);
+
+            mimeMultipart.addBodyPart(messageBodyAttachPart); // image data 추가
+		}
 	}
 
 	/**
@@ -98,7 +155,6 @@ public class MailSender {
             BodyPart messageBodyPart = new MimeBodyPart();
             DataSource source = new FileDataSource(file);
             messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setHeader("Content-ID", "flower");
 
             multipart.addBodyPart(messageBodyPart);
         }

@@ -1,6 +1,7 @@
 package com.kyu.mail;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,24 @@ public class MailVO {
 	private String recipient;
 	/** 메일 내용 */
 	private String htmlText;
+	/** 메일 내용 파일 path */
+	private URL htmlUrl;
 	/** 첨부 파일 */
 	private final List<File> attachedFiles = new ArrayList<File>();;
+
+	/**
+	 * @return the htmlUrl
+	 */
+	public URL getHtmlUrl() {
+		return htmlUrl;
+	}
+
+	/**
+	 * @param htmlUrl the htmlUrl to set
+	 */
+	public void setHtmlUrl(URL htmlUrl) {
+		this.htmlUrl = htmlUrl;
+	}
 
 	/**
 	 * @return the attachedFiles
@@ -104,6 +121,6 @@ public class MailVO {
 	@Override
 	public String toString() {
 		return "MailVO [subject=" + subject + ", from=" + from + ", recipient=" + recipient + ", htmlText=" + htmlText
-				+ ", attachedFiles=" + attachedFiles + "]";
+				+ ", htmlUrl=" + htmlUrl + ", attachedFiles=" + attachedFiles + "]";
 	}
 }

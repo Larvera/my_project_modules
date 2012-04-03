@@ -14,5 +14,6 @@ public class PathTest {
 
 		String path = PathTest.class.getResource("").getPath();
 		System.out.println(path);
+
 	}
 }

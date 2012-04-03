@@ -24,7 +24,7 @@ public class Conf {
 	private static Properties mPro = null;
 
 	/** The m pp url. */
-	public static String mPpUrl = "conf.properties";
+	public static String mPpUrl = "properties/conf.properties";
 
 	/**
 	 *
