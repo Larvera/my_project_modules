@@ -2,14 +2,15 @@ package com.kyu.mail;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.kyu.common.Conf;
 
-
 /**
- * @FileName : MailSendHelper.java
+ * @FileName : Main.java
  * @Project : sample_project
- * @Date : 2012. 4. 3.
+ * @Date : 2012. 4. 4.
  * @작성자 : 이남규
  * @프로그램설명 :
  */
@@ -26,9 +27,10 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		Conf.init();
 
-		Main helper = new Main();
-		MailVO mailVO = helper.makeMailInfo();
-		MailSender.send(mailVO);
+		Main main = new Main();
+		MailHandler handler = new MailHandler();
+		MailVO mailVO = main.makeMailInfo();
+		handler.send(mailVO);
 	}
 
 	/**
@@ -44,10 +46,11 @@ public class Main {
 		mailVO.setFrom("lng1982@naver.com");
 		mailVO.setRecipient("lng1982@incross.com");
 		mailVO.setSubject("메일전송테스트");
-		mailVO.setHtmlText("<H1>Hello</H1><img src=\"img/ok.gif\"><img src=\"img/modify.gif\">");
+		mailVO.setTemplatePath("msg/mail/test.mail");
 
-		URL url = this.getClass().getClassLoader().getResource("msg/mail/mail.html");
-		mailVO.setHtmlUrl(url);
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("name", "이남규");
+		mailVO.setParamMap(paramMap);
 
 		URL attatchUrl = this.getClass().getClassLoader().getResource("msg/mail/img/ok.gif");
 		mailVO.setAttachedFiles(new File(attatchUrl.getFile())); // 첨부 파일

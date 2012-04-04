@@ -54,7 +54,7 @@ public class MailSender {
 	 * @return
 	 * @throws Exception
 	 */
-	public static boolean send(MailVO mailVO) {
+	public static boolean sendMail(MailVO mailVO) {
 		boolean isSuccess = false;
 		try {
 			System.out.println("#########################################");
@@ -121,7 +121,7 @@ public class MailSender {
 		}
 
 		copiedHtml.append(htmlbody.substring(curpos));
-		messageBodyPart.setContent(copiedHtml.toString(), "text/html");
+		messageBodyPart.setContent(copiedHtml.toString(), "text/html; charset=UTF-8");
 		mimeMultipart.addBodyPart(messageBodyPart); // 본문 내용 추가
 
 		Iterator<String> keyIter = cidMap.keySet().iterator();

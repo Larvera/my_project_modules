@@ -8,6 +8,7 @@
 	<table>
 		<tr>
 			<td>이미지 전송 테스트</td>
+			<td>나는 #name#이다.</td>
 			<td>
 				<img src="img/ok.gif">
 			</td>

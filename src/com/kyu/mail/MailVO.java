@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @FileName : MailVO.java
@@ -24,8 +25,45 @@ public class MailVO {
 	private String htmlText;
 	/** 메일 내용 파일 path */
 	private URL htmlUrl;
+	/** template 경로 */
+	private String templatePath;
 	/** 첨부 파일 */
-	private final List<File> attachedFiles = new ArrayList<File>();;
+	private final List<File> attachedFiles = new ArrayList<File>();
+	/** 맵핑 파라미터 value */
+	private Map<String, String> paramMap;
+
+	/**
+	 * @return the paramMap
+	 */
+	public Map<String, String> getParamMap() {
+		return paramMap;
+	}
+
+	/**
+	 * <pre>
+	 * setParamMap
+	 *
+	 * <pre>
+	 * @param key
+	 * @param value
+	 */
+	public void setParamMap(Map<String, String> paramMap) {
+		this.paramMap = paramMap;
+	}
+
+	/**
+	 * @return the templatePath
+	 */
+	public String getTemplatePath() {
+		return templatePath;
+	}
+
+	/**
+	 * @param templatePath the templatePath to set
+	 */
+	public void setTemplatePath(String templatePath) {
+		this.templatePath = templatePath;
+	}
 
 	/**
 	 * @return the htmlUrl
@@ -121,6 +159,7 @@ public class MailVO {
 	@Override
 	public String toString() {
 		return "MailVO [subject=" + subject + ", from=" + from + ", recipient=" + recipient + ", htmlText=" + htmlText
-				+ ", htmlUrl=" + htmlUrl + ", attachedFiles=" + attachedFiles + "]";
+				+ ", htmlUrl=" + htmlUrl + ", templatePath=" + templatePath + ", attachedFiles=" + attachedFiles
+				+ ", paramMap=" + paramMap + "]";
 	}
 }
