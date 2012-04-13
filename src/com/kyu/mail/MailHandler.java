@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.kyu.common.Conf;
+
 
 
 /**
@@ -38,7 +40,10 @@ public class MailHandler {
 			String html = getMessageMaping(mailVO.getParamMap(), htmlText); // 메일 내용
 			mailVO.setHtmlText(html);
 
-			sentMail = MailSender.sendMail(mailVO);
+			String host = Conf.getValue("mail.host");
+			String authFlag = Conf.getValue("mail.smtp.auth");
+			MailSender mailSender = new MailSender(host, authFlag);
+			sentMail = mailSender.sendMail(mailVO);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

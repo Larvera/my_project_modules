@@ -36,14 +36,21 @@ import com.kyu.common.Conf;
 public class MailSender {
 
 	/** 로그 출력 모드 */
-	private final static boolean DEBUG = true;
+	private final boolean DEBUG = true;
+
+	/** SMTP 호스트 */
+	private final String host;
+
+	/** 사용자 인증 여부 */
+	private final String authFlag;
 
 	/**
-	 *  no create instance
+	 * default constroctor
 	 */
-	private MailSender() {
-        throw new AssertionError();
-    }
+	public MailSender(String host, String authFlag) {
+		this.host = host;
+		this.authFlag = authFlag;
+	}
 
 	/**
 	 * <pre>
@@ -54,7 +61,7 @@ public class MailSender {
 	 * @return
 	 * @throws Exception
 	 */
-	public static boolean sendMail(MailVO mailVO) {
+	public boolean sendMail(MailVO mailVO) {
 		boolean isSuccess = false;
 		try {
 			System.out.println("#########################################");
@@ -97,7 +104,7 @@ public class MailSender {
 	 * @param mimeMultipart
 	 * @throws Exception
 	 */
-	private static void makeBodyPart(URL htmlUrl, String htmlbody, MimeMultipart mimeMultipart) throws Exception {
+	private void makeBodyPart(URL htmlUrl, String htmlbody, MimeMultipart mimeMultipart) throws Exception {
 		HashMap<String, String> cidMap = new HashMap<String, String>();
 		BodyPart messageBodyPart = new MimeBodyPart();
 
@@ -150,7 +157,7 @@ public class MailSender {
      * @param multipart
      * @throws MessagingException
      */
-    private static void attachFiles(MailVO mailVO, Multipart multipart) throws MessagingException {
+    private void attachFiles(MailVO mailVO, Multipart multipart) throws MessagingException {
         for (File file : mailVO.getAttachedFiles()) {
             BodyPart messageBodyPart = new MimeBodyPart();
             DataSource source = new FileDataSource(file);
@@ -170,7 +177,7 @@ public class MailSender {
 	 * @throws MessagingException
 	 * @throws AddressException
 	 */
-	private static void configureMessage(MailVO mailVO, MimeMessage message) throws MessagingException, AddressException {
+	private void configureMessage(MailVO mailVO, MimeMessage message) throws MessagingException, AddressException {
 		message.setSubject(mailVO.getSubject());
 		message.setFrom(new InternetAddress(mailVO.getFrom()));
 		message.setSentDate(new Date());
@@ -190,7 +197,7 @@ public class MailSender {
 	 * <pre>
 	 * @return
 	 */
-	private static MimeMessage createMimeMessage() {
+	private MimeMessage createMimeMessage() {
 		Properties props = makeProp();
 
 		String userId = Conf.getValue("mail.smtp.user");
@@ -211,12 +218,12 @@ public class MailSender {
 	 * <pre>
 	 * @return
 	 */
-	private static Properties makeProp() {
+	private Properties makeProp() {
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.smtp.starttls.enable", "true");
-		props.setProperty("mail.host", Conf.getValue("mail.host"));
-        props.setProperty("mail.smtp.auth", Conf.getValue("mail.smtp.auth"));
+		props.setProperty("mail.host", host);
+        props.setProperty("mail.smtp.auth", authFlag);
 		return props;
 	}
 }
