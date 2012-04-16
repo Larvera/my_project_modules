@@ -5,6 +5,7 @@
 		<echo message="${test}"></echo>
 		<antcall target="c"></antcall>
 		<antcall target="d"></antcall>
+		<antcall target="hello"></antcall>
 	</target>
 
 	<target name="c">
@@ -16,8 +17,8 @@
 	</target>
 
 	<target name="hello">
-		<echo message="${test}"></echo>
-		<echo message="##hello world" />
+		<echo message="${test}" />
+		<echo message="${hello}" />
 	</target>
 
 </project>

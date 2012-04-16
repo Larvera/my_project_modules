@@ -2,7 +2,7 @@
 <project name="ant" basedir="." default="main">
 
 	<target name="main">
-		<property name="head" value="head!!!입니다." />
+		<property name="head" value="입니다." />
 		<antcall target="a">
 			<param name="namkyu" value="남규"  />
 		</antcall>
@@ -11,7 +11,7 @@
 	</target>
 
 	<target name="a">
-		<echo message="aaaa ${namkyu}, ${head}" />
+		<echo message="aaaa ${namkyu} ${head}" />
 	</target>
 
 	<target name="b">
@@ -19,8 +19,9 @@
 	</target>
 
 	<target name="c">
-		<ant antfile="build_a.xml" target="hello">
+		<ant antfile="build_a.xml" target="main">
 			<property name="test" value="test!!!" />
+			<property name="hello" value="hello world!!!" />
 		</ant>
 	</target>
 
