@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<project name="ant" basedir="." default="main">
+
+	<target name="main">
+		<property name="head" value="head!!!입니다." />
+		<antcall target="a">
+			<param name="namkyu" value="남규"  />
+		</antcall>
+		<antcall target="b"></antcall>
+		<antcall target="c"></antcall>
+	</target>
+
+	<target name="a">
+		<echo message="aaaa ${namkyu}, ${head}" />
+	</target>
+
+	<target name="b">
+		<echo message="bbb" />
+	</target>
+
+	<target name="c">
+		<ant antfile="build_a.xml" target="hello">
+			<property name="test" value="test!!!" />
+		</ant>
+	</target>
+
+</project>

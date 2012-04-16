@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<project name="ant" basedir="." default="man_build">
+
+	<!-- ############################################################################## -->
+    <!-- 								property						   			    -->
+	<!-- ############################################################################## -->
+    <property file="build.properties" />
+
+	<!-- project folder name -->
+	<property name="project_comm" value="ADNP_COMM" />
+	<property name="project_man" value="ADNP_MAN" />
+	<property name="project_dev" value="ADNP_DEV" />
+	<property name="project_isf" value="ADNP_ISF" />
+	<property name="project_auth" value="ADNP_AUTH" />
+
+	<!-- POC별 SVN 소스 업데이트 리스트 -->
+	<property name="svn_project_target_list_man" value="${svn.repository.man.url},${svn.repository.comm.url}" />
+	<property name="svn_project_target_list_dev" value="${svn.repository.dev.url},${svn.repository.comm.url}" />
+	<property name="svn_project_target_list_isf" value="${svn.repository.isf.url}" />
+	<property name="svn_project_target_list_auth" value="${svn.repository.auth.url},${svn.repository.comm.url}" />
+
+	<!-- POC별 SVN 체크아웃 디렉토리 -->
+	<property name="checkout_project_comm" value="${checkout.dir}/${project_comm}" />
+	<property name="checkout_project_man" value="${checkout.dir}/${project_man}" />
+	<property name="checkout_project_dev" value="${checkout.dir}/${project_dev}" />
+	<property name="checkout_project_isf" value="${checkout.dir}/${project_isf}" />
+	<property name="checkout_project_auth" value="${checkout.dir}/${project_auth}" />
+
+	<!-- POC별 배포될 디렉토리 -->
+	<property name="app_home_man_dir" value="${app.home.dir}/${project_man}" />
+	<property name="app_home_dev_dir" value="${app.home.dir}/${project_dev}" />
+	<property name="app_home_isf_dir" value="${app.home.dir}/${project_isf}" />
+	<property name="app_home_auth_dir" value="${app.home.dir}/${project_auth}" />
+
+	<!-- apache document root path -->
+	<property name="apache_document_root_man" value="man" />
+	<property name="apache_document_root_dev" value="dev" />
+
+
+	<!-- ############################################################################## -->
+    <!-- 								CLASS PATH						   			    -->
+	<!-- ############################################################################## -->
+    <path id="ant_classpath">
+        <fileset dir="${ant.home.dir}/lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+	<path id="common_classpath">
+		<fileset dir="${catalina.home.dir}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${java.home.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${cubeone.jar.path}">
+			<include name="CubeOneAPI.jar"/>
+		</fileset>
+	</path>
+
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant_classpath" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="ant_classpath" />
+
+	<!-- ############################################################################## -->
+    <!-- 								SVN TASK						   			    -->
+	<!-- ############################################################################## -->
+	<!-- 체크아웃 디렉토리 체크 -->
+	<target name="check_export_empty">
+		<available file="${checkout.dir}/${project_name}" property="svn_export.exists" />
+	</target>
+
+	<!-- SVN trunk 체크 아웃 -->
+	<target name="svn_checkout" depends="check_export_empty" unless="svn_export.exists">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| SVN CHECKOUT START                                          | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<svn username="${svn.username}" password="${svn.password}">
+			<checkout url="${svn_repository_url}" revision="HEAD" destPath="${checkout.dir}/${project_name}" />
+		</svn>
+	</target>
+
+	<!-- SVN 업데이트 -->
+	<target name="svn_update" depends="check_export_empty" if="svn_export.exists">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| SVN UPDATE	START                                            | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<svn username="${svn.username}" password="${svn.password}">
+			<update dir="${checkout.dir}/${project_name}" />
+		</svn>
+	</target>
+
+	<!-- 관리자 -->
+	<target name="get_svn_source_man">
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.man.url}" />
+			<param name="project_name" value="${project_man}" />
+		</antcall>
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.comm.url}" />
+			<param name="project_name" value="${project_comm}" />
+		</antcall>
+	</target>
+
+	<!-- 개발자 -->
+	<target name="get_svn_source_dev">
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.dev.url}" />
+			<param name="project_name" value="${project_dev}" />
+		</antcall>
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.comm.url}" />
+			<param name="project_name" value="${project_comm}" />
+		</antcall>
+	</target>
+
+	<!-- ISF -->
+	<target name="get_svn_source_isf">
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.isf.url}" />
+			<param name="project_name" value="${project_isf}" />
+		</antcall>
+	</target>
+
+	<!-- AUTH -->
+	<target name="get_svn_source_auth">
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.auth.url}" />
+			<param name="project_name" value="${project_auth}" />
+		</antcall>
+		<antcall target="svn_job_process">
+			<param name="svn_repository_url" value="${svn.repository.comm.url}" />
+			<param name="project_name" value="${project_comm}" />
+		</antcall>
+	</target>
+
+	<!-- svn job -->
+	<target name="svn_job_process" depends="svn_checkout, svn_update" />
+
+	<!-- ############################################################################## -->
+    <!-- 							   POC BUILD START					   			    -->
+	<!-- ############################################################################## -->
+
+	<!-- 관리자 -->
+	<target name="man_build">
+		<property name="document_root" value="${apache_document_root_man}" />
+		<property name="project_home" value="${checkout_project_man}" />
+		<property name="app_home_dir" value="${app_home_man_dir}" />
+		<property name="app_classpath" value="${checkout_project_man}" />
+
+		<antcall target="get_svn_source_man" />
+		<antcall target="build_comm" />
+		<antcall target="build_comm_apache" />
+		<antcall target="build" />
+		<antcall target="build_apache" />
+	</target>
+
+	<!-- 개발자 -->
+	<target name="dev_build">
+		<property name="document_root" value="${apache_document_root_dev}" />
+		<property name="project_home" value="${checkout_project_dev}" />
+		<property name="app_home_dir" value="${app_home_dev_dir}" />
+		<property name="app_classpath" value="${checkout_project_dev}" />
+
+		<antcall target="get_svn_source_dev" />
+		<antcall target="build_comm" />
+		<antcall target="build_comm_apache" />
+		<antcall target="build" />
+		<antcall target="build_apache" />
+	</target>
+
+	<!-- isf -->
+	<target name="isf_build">
+		<property name="project_home" value="${checkout_project_isf}" />
+		<property name="app_home_dir" value="${app_home_isf_dir}" />
+		<property name="app_classpath" value="${checkout_project_isf}" />
+
+		<antcall target="get_svn_source_isf" />
+		<antcall target="build" />
+	</target>
+
+	<!-- auth -->
+	<target name="auth_build">
+		<property name="project_home" value="${checkout_project_auth}" />
+		<property name="app_home_dir" value="${app_home_dev_dir}" />
+		<property name="app_classpath" value="${checkout_project_auth}" />
+
+		<antcall target="get_svn_source_auth" />
+		<antcall target="build_comm" />
+		<antcall target="build" />
+	</target>
+
+	<!-- ############################################################################## -->
+    <!-- 								    BUILD						   			    -->
+	<!-- ############################################################################## -->
+	<!-- source build -->
+	<target name="build">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| BUILD START                                                 | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<copy todir="${app_home_dir}" overwrite="true">
+			<fileset dir="${project_home}/WebContent">
+				<include name="**/*.jsp" />
+				<include name="**/*.xml" />
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${app_home_dir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${project_home}/conf">
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+
+		<javac
+			debug="on"
+			nowarn="false"
+			deprecation="off"
+			listfiles="true"
+			failonerror="true"
+			srcdir="${project_home}/src"
+			destdir="${app_home_dir}/WEB-INF/classes"
+			encoding="${java.compile.encoding}"
+			includeantruntime="false">
+
+			<include name="**/*.java" />
+			<classpath>
+				<path refid="common_classpath" />
+				<fileset dir="${app_classpath}/WebContent/WEB-INF/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- apache build -->
+	<target name="build_apache">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| BUILD APACHE START                                          | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<copy todir="${apache.home.dir}/${document_root}" overwrite="true">
+			<fileset dir="${project_home}/WebContent">
+				<include name="**/*.htm" />
+				<include name="**/*.html" />
+				<include name="favicon.ico" />
+				<include name="**/*.jpg" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+				<include name="**/*.swf" />
+				<include name="**/*.js" />
+				<include name="**/*.css" />
+				<include name="**/*.xap" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- comm source copy -->
+	<target name="build_comm">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| BUILD COMM START                                            | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<copy todir="${project_home}/src">
+			<fileset dir="${checkout_project_comm}/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- apache build -->
+	<target name="build_comm_apache">
+		<echo message="|-------------------------------------------------------------| " />
+		<echo message="| BUILD COMM APACHE START                                     | " />
+		<echo message="|-------------------------------------------------------------| " />
+		<copy todir="${apache.home.dir}/${document_root}" overwrite="true">
+			<fileset dir="${checkout_project_comm}/conf">
+				<include name="**/*.html" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

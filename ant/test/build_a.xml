@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="ant" basedir="." default="main">
+
+	<target name="main">
+		<echo message="${test}"></echo>
+		<antcall target="c"></antcall>
+		<antcall target="d"></antcall>
+	</target>
+
+	<target name="c">
+		<echo message="ccc" />
+	</target>
+
+	<target name="d">
+		<echo message="ddd" />
+	</target>
+
+	<target name="hello">
+		<echo message="${test}"></echo>
+		<echo message="##hello world" />
+	</target>
+
+</project>
