@@ -31,7 +31,6 @@ public class MailHandler {
 	 * @return
 	 */
 	public boolean send(MailVO mailVO) {
-		boolean sentMail = false;
 		try {
 			URL htmlUrl = getTemplateUrl(mailVO.getTemplatePath()); // template 경로 획득
 			mailVO.setHtmlUrl(htmlUrl);
@@ -43,13 +42,15 @@ public class MailHandler {
 			String host = Conf.getValue("mail.host");
 			String authFlag = Conf.getValue("mail.smtp.auth");
 			MailSender mailSender = new MailSender(host, authFlag);
-			sentMail = mailSender.sendMail(mailVO);
+
+			mailSender.sendMail(mailVO); // 메일 전송
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			return false;
 		}
 
-		return sentMail;
+		return true;
 	}
 
 

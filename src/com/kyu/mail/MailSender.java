@@ -61,37 +61,28 @@ public class MailSender {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean sendMail(MailVO mailVO) {
-		boolean isSuccess = false;
-		try {
-			System.out.println("#########################################");
-			System.out.println("## 메일 전송 START");
-			System.out.println("#########################################");
-			MimeMessage message = createMimeMessage();
+	public void sendMail(MailVO mailVO) throws Exception {
+		System.out.println("#########################################");
+		System.out.println("## 메일 전송 START");
+		System.out.println("#########################################");
+		MimeMessage message = createMimeMessage();
 
-			// 봉투
-			configureMessage(mailVO, message);
+		// 봉투
+		configureMessage(mailVO, message);
 
-			// 속봉투
-			MimeMultipart mimeMultipart = new MimeMultipart("related"); // html 메시지를 나타내는 부분과 이미지를 나타내는 부분으로 구성되는 multi-part메시지 생성
+		// 속봉투
+		MimeMultipart mimeMultipart = new MimeMultipart("related"); // html 메시지를 나타내는 부분과 이미지를 나타내는 부분으로 구성되는 multi-part메시지 생성
 
-			// 보낼 메세지 생성
-			makeBodyPart(mailVO.getHtmlUrl(), mailVO.getHtmlText(), mimeMultipart);
+		// 보낼 메세지 생성
+		makeBodyPart(mailVO.getHtmlUrl(), mailVO.getHtmlText(), mimeMultipart);
 
-			// 첨부 파일 셋팅
-			if (mailVO.getAttachedFiles().isEmpty() == false) {
-				attachFiles(mailVO, mimeMultipart);
-			}
-
-			message.setContent(mimeMultipart);
-			Transport.send(message);
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			isSuccess = false;
+		// 첨부 파일 셋팅
+		if (mailVO.getAttachedFiles().isEmpty() == false) {
+			attachFiles(mailVO, mimeMultipart);
 		}
 
-		return isSuccess;
+		message.setContent(mimeMultipart);
+		Transport.send(message);
 	}
 
 	/**
