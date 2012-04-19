@@ -11,36 +11,36 @@ import com.kyu.common.Conf;
  */
 public class FTPHandler {
 
-	/** FTP 아이피 */
-	private final String IP;
-	/** FTP 포트 */
-	private final int PORT;
-	/** FTP 접속 아이디 */
-	private final String USER;
-	/** FTP 접속 패스워드 */
-	private final String PASSWORD;
-
 	/**
-	 * 초기화
+	 * <pre>
+	 * job
+	 *
+	 * <pre>
+	 * @param ftpvo
+	 * @return
 	 */
-	public FTPHandler() {
-		IP = Conf.getValue("ftp.remote.ip");
-		PORT = Conf.getIntValue("ftp.remote.port");
-		USER = Conf.getValue("ftp.remote.user");
-		PASSWORD = Conf.getValue("ftp.remote.password");
-	}
-
 	public boolean job(FTPVO ftpvo) {
 		boolean isSuccess = false;
-		FTPUtil ftp = null;
 		try {
-			ftp = new FTPUtil();
+			FTPUtil ftp = new FTPUtil();
 
 			// FTP 연결
-			ftp.connect(IP, PORT);
+			ftp.connect(Conf.getValue("ftp.remote.ip"), Conf.getIntValue("ftp.remote.port"));
 
 			// FTP 로그인
-			ftp.login(USER, PASSWORD);
+			ftp.login(Conf.getValue("ftp.remote.user"), Conf.getValue("ftp.remote.password"));
+
+			FTPType type = ftpvo.getType();
+			if (FTPType.GET == type) {
+
+			} else if(FTPType.PUT == type) {
+
+			} else if(FTPType.BOTH == type) {
+
+			} else {
+				System.out.println("##job invalid type## type=" + type);
+				isSuccess = false;
+			}
 
 			// FTP remote 디렉토리 이동
 			ftp.cd(ftpvo.getRemoteDirectory());
@@ -49,10 +49,19 @@ public class FTPHandler {
 			ftp.disconnect();
 
 		} catch (Exception ex) {
+			System.out.println("##job exception## ftpvo=" + ftpvo);
 			ex.printStackTrace();
 			isSuccess = false;
 		}
 
 		return isSuccess;
+	}
+
+	public boolean uploadProcess() {
+		return false;
+	}
+
+	public boolean downloadProcess() {
+		return false;
 	}
 }

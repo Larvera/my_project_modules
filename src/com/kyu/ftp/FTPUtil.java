@@ -53,7 +53,7 @@ public class FTPUtil {
             isConnected = FTPReply.isPositiveCompletion(reply);
             if (isConnected == false) {
             	client.disconnect();
-            	System.out.println("##연결 거부!!");
+            	System.out.println("##connect failed## remoteIp=" + remoteIp + ", port=" + port);
             }
 
 		} catch (IOException ex) {
@@ -63,6 +63,7 @@ public class FTPUtil {
                 } catch(IOException f) {}
             }
 
+			System.out.println("##connect exception## remoteIp=" + remoteIp + ", port=" + port);
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -76,16 +77,16 @@ public class FTPUtil {
 	 * 디렉토리 이동
 	 * <pre>
 	 * @param path
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public void cd(String path) throws Exception {
+	public void cd(String path) throws IOException {
 		client.changeWorkingDirectory(path);
 	}
 
 	/**
 	 * <pre>
 	 * login
-	 *
+	 * 로그인
 	 * <pre>
 	 * @param userId
 	 * @param password
@@ -94,9 +95,47 @@ public class FTPUtil {
 	 */
 	public boolean login(String userId, String password) throws IOException {
 		boolean isFtpLogin = client.login(userId, password);
-//		client.enterLocalPassiveMode();
-//		client.setFileType(BINARY_FILE_TYPE);
+		client.enterLocalPassiveMode();
+		client.setFileType(BINARY_FILE_TYPE);
 		return isFtpLogin;
+	}
+
+	/**
+	 * <pre>
+	 * logOut
+	 * 로그 아웃
+	 * <pre>
+	 * @throws IOException
+	 */
+	public void logout() throws IOException  {
+		client.logout();
+	}
+
+	/**
+	 * <pre>
+	 * disconnect
+	 * 접속 끓기
+	 * <pre>
+	 * @throws IOException
+	 */
+	public void disconnect() throws IOException {
+		client.disconnect();
+	}
+
+	/**
+	 * <pre>
+	 * deleteFile
+	 * 파일 삭제
+	 * <pre>
+	 * @param file
+	 * @return
+	 */
+	public boolean deleteFile(File file) {
+		boolean fileDelFlag = false;
+		if (file.exists()) {
+			fileDelFlag = file.delete();
+		}
+		return fileDelFlag;
 	}
 
 	/**
@@ -119,10 +158,12 @@ public class FTPUtil {
 			downFlag = client.retrieveFile(remoteFileName, fos);
 
 			if (downFlag == false) {
-				deleteFile(file); // 파일 다운로드 실패 시 로컬에 생성한 파일 삭제
+				boolean isDelete = deleteFile(file); // 파일 다운로드 실패 시 로컬에 생성한 파일 삭제
+				System.out.println("##getRetrieveFile failed## remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName + ", isDelete=" + isDelete);
 			}
 
 		} catch (Exception ex) {
+			System.out.println("##getRetrieveFile exception## remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
@@ -138,23 +179,6 @@ public class FTPUtil {
 
 	/**
 	 * <pre>
-	 * deleteFile
-	 * 파일 삭제
-	 * <pre>
-	 * @param file
-	 * @return
-	 * @throws Exception
-	 */
-	public boolean deleteFile(File file) throws Exception {
-		boolean fileDelFlag = false;
-		if (file.exists()) {
-			fileDelFlag = file.delete();
-		}
-		return fileDelFlag;
-	}
-
-	/**
-	 * <pre>
 	 * fileUpload
 	 * 파일 업로드
 	 * <pre>
@@ -166,12 +190,15 @@ public class FTPUtil {
 		try {
 			in = new FileInputStream(uploadLocalFilePath);
 			client.setFileType(BINARY_FILE_TYPE);
+
 			if (client.storeFile(uploadFileName, in) == true) {
-				System.out.println("업로드 성공!!");
+				System.out.println("##uploadFile success## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
 			} else {
-				System.out.println("업로드 실패!!");
+				System.out.println("##uploadFile failed## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
 			}
+
 		} catch (Exception ex) {
+			System.out.println("##uploadFile exception## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
@@ -181,25 +208,5 @@ public class FTPUtil {
 				} catch (IOException ex) {}
 			}
 		}
-	}
-
-	/**
-	 * <pre>
-	 * logOut
-	 * 로그 아웃
-	 * <pre>
-	 */
-	public void logout() throws Exception {
-		client.logout();
-	}
-
-	/**
-	 * <pre>
-	 * disconnect
-	 * 접속 끓기
-	 * <pre>
-	 */
-	public void disconnect() throws Exception {
-		client.disconnect();
 	}
 }

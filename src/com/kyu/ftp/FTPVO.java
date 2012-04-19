@@ -9,6 +9,7 @@ package com.kyu.ftp;
  */
 public class FTPVO {
 
+	/** 외부 아이피 */
 	private String remoteIp;
 	private String remoteDirectory;
 	private String userId;
@@ -18,6 +19,15 @@ public class FTPVO {
 	private String uploadLocalFilePath;
 	private String uploadFileName;
 	private int port;
+	private FTPType type;
+
+	public FTPType getType() {
+		return type;
+	}
+
+	public void setType(FTPType type) {
+		this.type = type;
+	}
 
 	public String getRemoteIp() {
 		return remoteIp;
