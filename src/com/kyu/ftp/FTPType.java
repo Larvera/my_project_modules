@@ -8,7 +8,5 @@ package com.kyu.ftp;
  * @프로그램설명 :
  */
 public enum FTPType {
-	GET
-	, PUT
-	, BOTH
+	GET, PUT, BOTH
 }

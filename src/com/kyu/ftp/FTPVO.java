@@ -106,6 +106,6 @@ public class FTPVO {
 		return "FTPVO [remoteIp=" + remoteIp + ", remoteDirectory=" + remoteDirectory + ", userId=" + userId
 				+ ", password=" + password + ", localFilePath=" + localFilePath + ", remoteFileName=" + remoteFileName
 				+ ", uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName + ", port="
-				+ port + "]";
+				+ port + ", type=" + type + "]";
 	}
 }

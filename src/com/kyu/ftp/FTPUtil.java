@@ -148,22 +148,26 @@ public class FTPUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean getRetrieveFile(String localFilePath, String remoteFileName) throws Exception {
+	public boolean getRetrieveFile(String localFilePath, String remoteFileName, String remoteDirectory) throws Exception {
 		boolean downFlag = false;
 		FileOutputStream fos = null;
 
 		try {
+			cd(remoteDirectory); // 디렉토리 이동
+
 			File file = new File(localFilePath);
 			fos = new FileOutputStream(file);
 			downFlag = client.retrieveFile(remoteFileName, fos);
 
-			if (downFlag == false) {
+			if (downFlag) {
+				System.out.println("##getRetrieveFile success## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
+			} else {
 				boolean isDelete = deleteFile(file); // 파일 다운로드 실패 시 로컬에 생성한 파일 삭제
-				System.out.println("##getRetrieveFile failed## remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName + ", isDelete=" + isDelete);
+				System.out.println("##getRetrieveFile failed## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName + ", isDelete=" + isDelete);
 			}
 
 		} catch (Exception ex) {
-			System.out.println("##getRetrieveFile exception## remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
+			System.out.println("##getRetrieveFile exception## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
@@ -185,20 +189,22 @@ public class FTPUtil {
 	 * @param uploadLocalFilePath
 	 * @param uploadFileName
 	 */
-	public void uploadFile(String uploadLocalFilePath, String uploadFileName) throws Exception {
+	public void uploadFile(String uploadLocalFilePath, String uploadFileName, String remoteDirectory) throws Exception {
 		InputStream in = null;
 		try {
+			cd(remoteDirectory); // 디렉토리 이동
+
 			in = new FileInputStream(uploadLocalFilePath);
 			client.setFileType(BINARY_FILE_TYPE);
 
-			if (client.storeFile(uploadFileName, in) == true) {
-				System.out.println("##uploadFile success## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
+			if (client.storeFile(uploadFileName, in)) {
+				System.out.println("##uploadFile success## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
 			} else {
-				System.out.println("##uploadFile failed## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
+				System.out.println("##uploadFile failed## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
 			}
 
 		} catch (Exception ex) {
-			System.out.println("##uploadFile exception## uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName);
+			System.out.println("##uploadFile exception## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
