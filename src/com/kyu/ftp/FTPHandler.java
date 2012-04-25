@@ -32,10 +32,7 @@ public class FTPHandler {
 	public boolean job(FTPVO ftpvo) {
 		boolean isSuccess = false;
 		try {
-			// FTP 연결
 			ftp.connect(Conf.getValue("ftp.remote.ip"), Conf.getIntValue("ftp.remote.port"));
-
-			// FTP 로그인
 			ftp.login(Conf.getValue("ftp.remote.user"), Conf.getValue("ftp.remote.password"));
 
 			FTPType type = ftpvo.getType();
@@ -50,7 +47,8 @@ public class FTPHandler {
 			}
 			// 파일 다운로드, 업로드
 			else if(FTPType.BOTH == type) {
-				// 차후 구현
+				uploadProcess(ftpvo);
+				downloadProcess(ftpvo);
 			}
 			// type error
 			else {
@@ -79,7 +77,7 @@ public class FTPHandler {
 	 * @throws Exception
 	 */
 	public void uploadProcess(FTPVO ftpvo) throws Exception {
-		ftp.uploadFile(ftpvo.getUploadLocalFilePath(), ftpvo.getUploadFileName(), ftpvo.getRemoteDirectory());
+		ftp.uploadFile(ftpvo.getUploadLocalDirectory(), ftpvo.getUploadFileNameList(), ftpvo.getUploadRemoteDirectory());
 	}
 
 	/**
@@ -91,6 +89,21 @@ public class FTPHandler {
 	 * @throws Exception
 	 */
 	public void downloadProcess(FTPVO ftpvo) throws Exception {
-		ftp.getRetrieveFile(ftpvo.getLocalFilePath(), ftpvo.getRemoteFileName(), ftpvo.getRemoteDirectory());
+		ftp.getRetrieveFile(ftpvo.getDownloadLocalFileDirectory(), ftpvo.getDownloadRemoteFileNameList(), ftpvo.getDownloadRemoteDirectory());
+	}
+
+	/**
+	 * <pre>
+	 * getFileName
+	 * 파일 이름 추출
+	 * <pre>
+	 * @param filePath
+	 * @return
+	 */
+	@Deprecated
+	public String getFileName(String filePath) {
+		int lastIdx = filePath.lastIndexOf("\\");
+		String result = filePath.substring(lastIdx + 1);
+		return result;
 	}
 }

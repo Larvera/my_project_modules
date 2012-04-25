@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import com.oroinc.net.ftp.FTP;
 import com.oroinc.net.ftp.FTPClient;
@@ -21,9 +22,6 @@ public class FTPUtil {
 
 	/** The client. */
 	private FTPClient client = null;
-
-	/** binary file type  */
-	private final int BINARY_FILE_TYPE = FTP.BINARY_FILE_TYPE;
 
 	/**
 	 *  생성자
@@ -96,7 +94,7 @@ public class FTPUtil {
 	public boolean login(String userId, String password) throws IOException {
 		boolean isFtpLogin = client.login(userId, password);
 		client.enterLocalPassiveMode();
-		client.setFileType(BINARY_FILE_TYPE);
+		client.setFileType(FTP.BINARY_FILE_TYPE);
 		return isFtpLogin;
 	}
 
@@ -148,26 +146,30 @@ public class FTPUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean getRetrieveFile(String localFilePath, String remoteFileName, String remoteDirectory) throws Exception {
+	public boolean getRetrieveFile(String downloadLocalDirectory, List<String> downloadFileNameList, String downloadRemoteDirectory) throws Exception {
 		boolean downFlag = false;
 		FileOutputStream fos = null;
 
 		try {
-			cd(remoteDirectory); // 디렉토리 이동
+			cd(downloadRemoteDirectory); // 디렉토리 이동
 
-			File file = new File(localFilePath);
-			fos = new FileOutputStream(file);
-			downFlag = client.retrieveFile(remoteFileName, fos);
+			for (String downloadFileName : downloadFileNameList) {
+				String downloadLocalFilePath = makeFilePath(downloadLocalDirectory, downloadFileName); // 다운로드 받을 로컬 path
 
-			if (downFlag) {
-				System.out.println("##getRetrieveFile success## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
-			} else {
-				boolean isDelete = deleteFile(file); // 파일 다운로드 실패 시 로컬에 생성한 파일 삭제
-				System.out.println("##getRetrieveFile failed## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName + ", isDelete=" + isDelete);
+				File file = new File(downloadLocalFilePath);
+				fos = new FileOutputStream(file);
+
+				downFlag = client.retrieveFile(downloadFileName, fos);
+				if (downFlag) {
+					System.out.println("##getRetrieveFile success## downloadRemoteDirectory=" + downloadRemoteDirectory + ", downloadFileName=" + downloadFileName + ", downloadLocalDirectory=" + downloadLocalDirectory);
+				} else {
+					boolean isDelete = deleteFile(file); // 파일 다운로드 실패 시 로컬에 생성한 파일 삭제
+					System.out.println("##getRetrieveFile failed## downloadRemoteDirectory=" + downloadRemoteDirectory + ", downloadFileName=" + downloadFileName + ", downloadLocalDirectory=" + downloadLocalDirectory + ", isDelete=" + isDelete);
+				}
 			}
 
 		} catch (Exception ex) {
-			System.out.println("##getRetrieveFile exception## remoteDirectory=" + remoteDirectory + ", remoteFileName=" + remoteFileName + ", localFilePath=" + remoteFileName);
+			System.out.println("##getRetrieveFile exception## downloadRemoteDirectory=" + downloadRemoteDirectory + ", downloadFileNameList=" + downloadFileNameList + ", downloadLocalDirectory=" + downloadLocalDirectory);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
@@ -189,22 +191,25 @@ public class FTPUtil {
 	 * @param uploadLocalFilePath
 	 * @param uploadFileName
 	 */
-	public void uploadFile(String uploadLocalFilePath, String uploadFileName, String remoteDirectory) throws Exception {
+	public void uploadFile(String uploadLocalDirectory, List<String> uploadFileNameList, String uploadRemoteDirectory) throws Exception {
 		InputStream in = null;
 		try {
-			cd(remoteDirectory); // 디렉토리 이동
+			cd(uploadRemoteDirectory); // 디렉토리 이동
+			client.setFileType(FTP.BINARY_FILE_TYPE);
 
-			in = new FileInputStream(uploadLocalFilePath);
-			client.setFileType(BINARY_FILE_TYPE);
+			for (String uploadFileName : uploadFileNameList) {
+				String uploadLocalFilePath = makeFilePath(uploadLocalDirectory, uploadFileName);
+				in = new FileInputStream(uploadLocalFilePath); // 로컬 파일 read
 
-			if (client.storeFile(uploadFileName, in)) {
-				System.out.println("##uploadFile success## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
-			} else {
-				System.out.println("##uploadFile failed## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
+				if (client.storeFile(uploadFileName, in)) {
+					System.out.println("##uploadFile success## remoteDirectory=" + uploadRemoteDirectory + ", uploadLocalDirectory=" + uploadLocalDirectory + ", uploadFileName=" + uploadFileName);
+				} else {
+					System.out.println("##uploadFile failed## remoteDirectory=" + uploadRemoteDirectory + ", uploadLocalDirectory=" + uploadLocalDirectory + ", uploadFileName=" + uploadFileName);
+				}
 			}
 
 		} catch (Exception ex) {
-			System.out.println("##uploadFile exception## remoteDirectory=" + remoteDirectory + ", uploadFileName=" + uploadFileName + ", uploadLocalFilePath=" + uploadLocalFilePath);
+			System.out.println("##uploadFile exception## remoteDirectory=" + uploadRemoteDirectory + ", uploadLocalDirectory=" + uploadLocalDirectory + ", uploadFileNameList=" + uploadFileNameList);
 			ex.printStackTrace();
 			throw ex;
 		} finally {
@@ -214,5 +219,22 @@ public class FTPUtil {
 				} catch (IOException ex) {}
 			}
 		}
+	}
+
+	/**
+	 * <pre>
+	 * makeFilePath
+	 *
+	 * <pre>
+	 * @param directory
+	 * @param fileName
+	 * @return
+	 */
+	public String makeFilePath(String directory, String fileName) {
+		StringBuilder path = new StringBuilder();
+		path.append(directory);
+		path.append(File.separator);
+		path.append(fileName);
+		return path.toString();
 	}
 }

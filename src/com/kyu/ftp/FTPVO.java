@@ -1,5 +1,8 @@
 package com.kyu.ftp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @FileName : FTPVO.java
  * @Project : sample_project
@@ -9,40 +12,65 @@ package com.kyu.ftp;
  */
 public class FTPVO {
 
-	/** 외부 아이피 */
-	private String remoteIp;
-	private String remoteDirectory;
+	/** 유저 아이디 */
 	private String userId;
+	/** 패스워드 */
 	private String password;
-	private String localFilePath;
-	private String remoteFileName;
-	private String uploadLocalFilePath;
-	private String uploadFileName;
-	private int port;
+	/** FTP IP */
+	private String remoteIp;
+	/** GET, PUT, BOTH 구분 */
 	private FTPType type;
+	/** FTP port  */
+	private int port;
 
-	public FTPType getType() {
-		return type;
+	/** 다운로드 받을 원격지 디렉토리 */
+	private String downloadRemoteDirectory;
+	/** 원격지에서 다운로드 받는 파일의 로컬 저장 디렉토리 */
+	private String downloadLocalFileDirectory;
+	/** 다운로드 받을 원격지 파일 리스트 */
+	private final List<String> downloadRemoteFileNameList = new ArrayList<String>();
+
+	/** 업로드 할 로컬 저장 디렉토리 */
+	private String uploadLocalDirectory;
+	/** 업로드 할 파일들의 원격 저장 디렉토리 */
+	private String uploadRemoteDirectory;
+	/** 업로드 할 파일 리스트 */
+	private final List<String> uploadLocalFileNameList = new ArrayList<String>();
+
+	public String getDownloadRemoteDirectory() {
+		return downloadRemoteDirectory;
 	}
 
-	public void setType(FTPType type) {
-		this.type = type;
+	public void setDownloadRemoteDirectory(String downloadRemoteDirectory) {
+		this.downloadRemoteDirectory = downloadRemoteDirectory;
 	}
 
-	public String getRemoteIp() {
-		return remoteIp;
+	public String getDownloadLocalFileDirectory() {
+		return downloadLocalFileDirectory;
 	}
 
-	public void setRemoteIp(String remoteIp) {
-		this.remoteIp = remoteIp;
+	public void setDownloadLocalFileDirectory(String downloadLocalFileDirectory) {
+		this.downloadLocalFileDirectory = downloadLocalFileDirectory;
 	}
 
-	public String getRemoteDirectory() {
-		return remoteDirectory;
+	public List<String> getDownloadRemoteFileNameList() {
+		return downloadRemoteFileNameList;
 	}
 
-	public void setRemoteDirectory(String remoteDirectory) {
-		this.remoteDirectory = remoteDirectory;
+	public void setDownloadRemoteFileNameList(String downloadFileName) {
+		this.downloadRemoteFileNameList.add(downloadFileName);
+	}
+
+	public List<String> getUploadLocalFileNameList() {
+		return uploadLocalFileNameList;
+	}
+
+	public String getUploadRemoteDirectory() {
+		return uploadRemoteDirectory;
+	}
+
+	public void setUploadRemoteDirectory(String uploadRemoteDirectory) {
+		this.uploadRemoteDirectory = uploadRemoteDirectory;
 	}
 
 	public String getUserId() {
@@ -61,36 +89,20 @@ public class FTPVO {
 		this.password = password;
 	}
 
-	public String getLocalFilePath() {
-		return localFilePath;
+	public String getRemoteIp() {
+		return remoteIp;
 	}
 
-	public void setLocalFilePath(String localFilePath) {
-		this.localFilePath = localFilePath;
+	public void setRemoteIp(String remoteIp) {
+		this.remoteIp = remoteIp;
 	}
 
-	public String getRemoteFileName() {
-		return remoteFileName;
+	public FTPType getType() {
+		return type;
 	}
 
-	public void setRemoteFileName(String remoteFileName) {
-		this.remoteFileName = remoteFileName;
-	}
-
-	public String getUploadLocalFilePath() {
-		return uploadLocalFilePath;
-	}
-
-	public void setUploadLocalFilePath(String uploadLocalFilePath) {
-		this.uploadLocalFilePath = uploadLocalFilePath;
-	}
-
-	public String getUploadFileName() {
-		return uploadFileName;
-	}
-
-	public void setUploadFileName(String uploadFileName) {
-		this.uploadFileName = uploadFileName;
+	public void setType(FTPType type) {
+		this.type = type;
 	}
 
 	public int getPort() {
@@ -101,11 +113,29 @@ public class FTPVO {
 		this.port = port;
 	}
 
+	public String getUploadLocalDirectory() {
+		return uploadLocalDirectory;
+	}
+
+	public void setUploadLocalDirectory(String uploadLocalDirectory) {
+		this.uploadLocalDirectory = uploadLocalDirectory;
+	}
+
+	public List<String> getUploadFileNameList() {
+		return uploadLocalFileNameList;
+	}
+
+	public void setUploadFileNameList(String uploadFileName) {
+		this.uploadLocalFileNameList.add(uploadFileName);
+	}
+
 	@Override
 	public String toString() {
-		return "FTPVO [remoteIp=" + remoteIp + ", remoteDirectory=" + remoteDirectory + ", userId=" + userId
-				+ ", password=" + password + ", localFilePath=" + localFilePath + ", remoteFileName=" + remoteFileName
-				+ ", uploadLocalFilePath=" + uploadLocalFilePath + ", uploadFileName=" + uploadFileName + ", port="
-				+ port + ", type=" + type + "]";
+		return "FTPVO [userId=" + userId + ", password=" + password + ", remoteIp=" + remoteIp + ", type=" + type
+				+ ", port=" + port + ", downloadRemoteDirectory=" + downloadRemoteDirectory
+				+ ", downloadLocalFileDirectory=" + downloadLocalFileDirectory + ", downloadRemoteFileNameList="
+				+ downloadRemoteFileNameList + ", uploadLocalDirectory=" + uploadLocalDirectory
+				+ ", uploadRemoteDirectory=" + uploadRemoteDirectory + ", uploadLocalFileNameList="
+				+ uploadLocalFileNameList + "]";
 	}
 }

@@ -38,14 +38,14 @@ public class Main {
 		Conf.init();
 		handler = new FTPHandler();
 
-		String test = "D";
+		String test = "UD";
 
 		if ("D".equals(test)) { // 다운로드
 			download();
 		} else if ("U".equals(test)) { // 업로드
 			upload();
 		} else if ("UD".equals(test)) { // 업, 다운로드
-
+			both();
 		}
 	}
 
@@ -57,9 +57,11 @@ public class Main {
 	 */
 	public void download() {
 		FTPVO ftpvo = new FTPVO();
-		ftpvo.setRemoteDirectory("/svc/tad");
-		ftpvo.setRemoteFileName("sh.tar.gz");
-		ftpvo.setLocalFilePath("E:\\test\\ftp\\sh.tar.gz");
+		ftpvo.setDownloadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setDownloadLocalFileDirectory("E:\\test\\ftp\\download");
+		ftpvo.setDownloadRemoteFileNameList("upload11.txt");
+		ftpvo.setDownloadRemoteFileNameList("upload22.txt");
+		ftpvo.setDownloadRemoteFileNameList("upload33.txt");
 		ftpvo.setType(FTPType.GET);
 		handler.job(ftpvo);
 	}
@@ -72,10 +74,36 @@ public class Main {
 	 */
 	public void upload() {
 		FTPVO ftpvo = new FTPVO();
-		ftpvo.setRemoteDirectory("/svc/tad/ftp");
-		ftpvo.setUploadFileName("upload111.txt");
-		ftpvo.setUploadLocalFilePath("E:\\test\\ftp\\upload.txt");
+		ftpvo.setUploadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setUploadLocalDirectory("E:\\test\\ftp");
+		ftpvo.setUploadFileNameList("upload11.txt");
+		ftpvo.setUploadFileNameList("upload22.txt");
+		ftpvo.setUploadFileNameList("upload33.txt");
 		ftpvo.setType(FTPType.PUT);
+		handler.job(ftpvo);
+	}
+
+	/**
+	 * <pre>
+	 * both
+	 *
+	 * <pre>
+	 */
+	public void both() {
+		FTPVO ftpvo = new FTPVO();
+		ftpvo.setDownloadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setDownloadLocalFileDirectory("E:\\test\\ftp\\download");
+		ftpvo.setDownloadRemoteFileNameList("upload11.txt");
+		ftpvo.setDownloadRemoteFileNameList("upload22.txt");
+		ftpvo.setDownloadRemoteFileNameList("upload33.txt");
+
+		ftpvo.setUploadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setUploadLocalDirectory("E:\\test\\ftp");
+		ftpvo.setUploadFileNameList("upload11.txt");
+		ftpvo.setUploadFileNameList("upload22.txt");
+		ftpvo.setUploadFileNameList("upload33.txt");
+
+		ftpvo.setType(FTPType.BOTH);
 		handler.job(ftpvo);
 	}
 }
