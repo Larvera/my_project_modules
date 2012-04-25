@@ -27,6 +27,8 @@ public class FTPVO {
 	private String downloadRemoteDirectory;
 	/** 원격지에서 다운로드 받는 파일의 로컬 저장 디렉토리 */
 	private String downloadLocalFileDirectory;
+	/** 다운로드 파일 패턴 */
+	private String downloadFilePattern;
 	/** 다운로드 받을 원격지 파일 리스트 */
 	private final List<String> downloadRemoteFileNameList = new ArrayList<String>();
 
@@ -34,8 +36,26 @@ public class FTPVO {
 	private String uploadLocalDirectory;
 	/** 업로드 할 파일들의 원격 저장 디렉토리 */
 	private String uploadRemoteDirectory;
+	/** 업로드 파일 패턴 */
+	private String uploadFilePattern;
 	/** 업로드 할 파일 리스트 */
 	private final List<String> uploadLocalFileNameList = new ArrayList<String>();
+
+	public String getDownloadFilePattern() {
+		return downloadFilePattern;
+	}
+
+	public void setDownloadFilePattern(String downloadFilePattern) {
+		this.downloadFilePattern = downloadFilePattern;
+	}
+
+	public String getUploadFilePattern() {
+		return uploadFilePattern;
+	}
+
+	public void setUploadFilePattern(String uploadFilePattern) {
+		this.uploadFilePattern = uploadFilePattern;
+	}
 
 	public String getDownloadRemoteDirectory() {
 		return downloadRemoteDirectory;
@@ -133,9 +153,15 @@ public class FTPVO {
 	public String toString() {
 		return "FTPVO [userId=" + userId + ", password=" + password + ", remoteIp=" + remoteIp + ", type=" + type
 				+ ", port=" + port + ", downloadRemoteDirectory=" + downloadRemoteDirectory
-				+ ", downloadLocalFileDirectory=" + downloadLocalFileDirectory + ", downloadRemoteFileNameList="
-				+ downloadRemoteFileNameList + ", uploadLocalDirectory=" + uploadLocalDirectory
-				+ ", uploadRemoteDirectory=" + uploadRemoteDirectory + ", uploadLocalFileNameList="
-				+ uploadLocalFileNameList + "]";
+				+ ", downloadLocalFileDirectory=" + downloadLocalFileDirectory + ", downloadFilePattern="
+				+ downloadFilePattern + ", downloadRemoteFileNameList=" + downloadRemoteFileNameList
+				+ ", uploadLocalDirectory=" + uploadLocalDirectory + ", uploadRemoteDirectory=" + uploadRemoteDirectory
+				+ ", uploadFilePattern=" + uploadFilePattern + ", uploadLocalFileNameList=" + uploadLocalFileNameList
+				+ "]";
+	}
+
+	public static void main(String[] args) {
+		FTPVO ftpvo = new FTPVO();
+		System.out.println(ftpvo);
 	}
 }

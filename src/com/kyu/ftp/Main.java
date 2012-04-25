@@ -59,9 +59,7 @@ public class Main {
 		FTPVO ftpvo = new FTPVO();
 		ftpvo.setDownloadRemoteDirectory("/svc/tad/ftp");
 		ftpvo.setDownloadLocalFileDirectory("E:\\test\\ftp\\download");
-		ftpvo.setDownloadRemoteFileNameList("upload11.txt");
-		ftpvo.setDownloadRemoteFileNameList("upload22.txt");
-		ftpvo.setDownloadRemoteFileNameList("upload33.txt");
+		ftpvo.setDownloadFilePattern("tad_daily.+20120425.csv");
 		ftpvo.setType(FTPType.GET);
 		handler.job(ftpvo);
 	}
@@ -76,9 +74,7 @@ public class Main {
 		FTPVO ftpvo = new FTPVO();
 		ftpvo.setUploadRemoteDirectory("/svc/tad/ftp");
 		ftpvo.setUploadLocalDirectory("E:\\test\\ftp");
-		ftpvo.setUploadFileNameList("upload11.txt");
-		ftpvo.setUploadFileNameList("upload22.txt");
-		ftpvo.setUploadFileNameList("upload33.txt");
+		ftpvo.setUploadFilePattern("tad_daily.+20120425.csv");
 		ftpvo.setType(FTPType.PUT);
 		handler.job(ftpvo);
 	}
@@ -93,15 +89,11 @@ public class Main {
 		FTPVO ftpvo = new FTPVO();
 		ftpvo.setDownloadRemoteDirectory("/svc/tad/ftp");
 		ftpvo.setDownloadLocalFileDirectory("E:\\test\\ftp\\download");
-		ftpvo.setDownloadRemoteFileNameList("upload11.txt");
-		ftpvo.setDownloadRemoteFileNameList("upload22.txt");
-		ftpvo.setDownloadRemoteFileNameList("upload33.txt");
+		ftpvo.setDownloadFilePattern("tad_daily.+20120425.csv");
 
 		ftpvo.setUploadRemoteDirectory("/svc/tad/ftp");
 		ftpvo.setUploadLocalDirectory("E:\\test\\ftp");
-		ftpvo.setUploadFileNameList("upload11.txt");
-		ftpvo.setUploadFileNameList("upload22.txt");
-		ftpvo.setUploadFileNameList("upload33.txt");
+		ftpvo.setUploadFilePattern("tad_daily.+20120425.csv");
 
 		ftpvo.setType(FTPType.BOTH);
 		handler.job(ftpvo);

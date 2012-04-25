@@ -1,5 +1,10 @@
 package com.kyu.ftp;
 
+import java.io.File;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.kyu.common.Conf;
 
 /**
@@ -47,8 +52,8 @@ public class FTPHandler {
 			}
 			// 파일 다운로드, 업로드
 			else if(FTPType.BOTH == type) {
-				uploadProcess(ftpvo);
 				downloadProcess(ftpvo);
+				uploadProcess(ftpvo);
 			}
 			// type error
 			else {
@@ -77,7 +82,10 @@ public class FTPHandler {
 	 * @throws Exception
 	 */
 	public void uploadProcess(FTPVO ftpvo) throws Exception {
-		ftp.uploadFile(ftpvo.getUploadLocalDirectory(), ftpvo.getUploadFileNameList(), ftpvo.getUploadRemoteDirectory());
+		List<String> uploadFileNameList = getUploadFileList(ftpvo);
+		ftp.uploadFile(ftpvo.getUploadLocalDirectory()
+				, uploadFileNameList
+				, ftpvo.getUploadRemoteDirectory());
 	}
 
 	/**
@@ -89,7 +97,37 @@ public class FTPHandler {
 	 * @throws Exception
 	 */
 	public void downloadProcess(FTPVO ftpvo) throws Exception {
-		ftp.getRetrieveFile(ftpvo.getDownloadLocalFileDirectory(), ftpvo.getDownloadRemoteFileNameList(), ftpvo.getDownloadRemoteDirectory());
+		ftp.getRetrieveFile(ftpvo.getDownloadLocalFileDirectory()
+				, ftpvo.getDownloadRemoteFileNameList()
+				, ftpvo.getDownloadRemoteDirectory()
+				, ftpvo.getDownloadFilePattern());
+	}
+
+	/**
+	 * <pre>
+	 * getUploadFileList
+	 * 업로드 디렉토리에서 패턴에 일치하는 파일 리스트 추출
+	 * <pre>
+	 * @param ftpvo
+	 * @return
+	 */
+	public List<String> getUploadFileList(FTPVO ftpvo) {
+		String uploadLocalDirectory = ftpvo.getUploadLocalDirectory();
+		File directory = new File(uploadLocalDirectory);
+		File[] files = directory.listFiles();
+
+		Pattern pattern = Pattern.compile(ftpvo.getUploadFilePattern());
+		for (File file : files) {
+			String fileName = file.getName();
+			Matcher matcher = pattern.matcher(fileName);
+			boolean matched = matcher.matches();
+
+			if (matched) { // 패턴 일치
+				ftpvo.setUploadFileNameList(fileName);
+			}
+		}
+
+		return ftpvo.getUploadFileNameList();
 	}
 
 	/**

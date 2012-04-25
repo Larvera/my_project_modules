@@ -5,10 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.oroinc.net.ftp.FTP;
 import com.oroinc.net.ftp.FTPClient;
+import com.oroinc.net.ftp.FTPFile;
 import com.oroinc.net.ftp.FTPReply;
 
 /**
@@ -146,12 +150,17 @@ public class FTPUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean getRetrieveFile(String downloadLocalDirectory, List<String> downloadFileNameList, String downloadRemoteDirectory) throws Exception {
+	public boolean getRetrieveFile(String downloadLocalDirectory, List<String> downloadFileNameList, String downloadRemoteDirectory, String downloadFilePattern) throws Exception {
 		boolean downFlag = false;
 		FileOutputStream fos = null;
 
 		try {
 			cd(downloadRemoteDirectory); // 디렉토리 이동
+
+			// 패턴이 지정되어 있으면 다운로드 받을 파일 리스트를 추출
+			if (downloadFilePattern != null) {
+				downloadFileNameList = getPatternByDownloadFileList(downloadFilePattern);
+			}
 
 			for (String downloadFileName : downloadFileNameList) {
 				String downloadLocalFilePath = makeFilePath(downloadLocalDirectory, downloadFileName); // 다운로드 받을 로컬 path
@@ -236,5 +245,32 @@ public class FTPUtil {
 		path.append(File.separator);
 		path.append(fileName);
 		return path.toString();
+	}
+
+	/**
+	 * <pre>
+	 * getPatternByDownloadFileList
+	 * 패턴을 이용하여 다운로드 받을 리스트 추출
+	 * <pre>
+	 * @param downloadFilePattern
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> getPatternByDownloadFileList(String downloadFilePattern) throws IOException {
+		List<String> downloadFileNameList = new ArrayList<String>();
+		FTPFile[] files = client.listFiles();
+
+		Pattern pattern = Pattern.compile(downloadFilePattern);
+		for (FTPFile file : files) {
+			String fileName = file.getName();
+			Matcher matcher = pattern.matcher(fileName);
+			boolean matched = matcher.matches();
+
+			if (matched) { // 패턴 일치
+				downloadFileNameList.add(fileName);
+			}
+		}
+
+		return downloadFileNameList;
 	}
 }
