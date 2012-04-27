@@ -1,7 +1,6 @@
 package com.kyu.ftp;
 
 import java.io.File;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,9 +81,12 @@ public class FTPHandler {
 	 * @throws Exception
 	 */
 	public void uploadProcess(FTPVO ftpvo) throws Exception {
-		List<String> uploadFileNameList = getUploadFileList(ftpvo);
+		if (ftpvo.getUploadFilePattern() != null) {
+			setUploadFileList(ftpvo);
+		}
+
 		ftp.uploadFile(ftpvo.getUploadLocalDirectory()
-				, uploadFileNameList
+				, ftpvo.getUploadFileNameList()
 				, ftpvo.getUploadRemoteDirectory());
 	}
 
@@ -111,7 +113,7 @@ public class FTPHandler {
 	 * @param ftpvo
 	 * @return
 	 */
-	public List<String> getUploadFileList(FTPVO ftpvo) {
+	public void setUploadFileList(FTPVO ftpvo) {
 		String uploadLocalDirectory = ftpvo.getUploadLocalDirectory();
 		File directory = new File(uploadLocalDirectory);
 		File[] files = directory.listFiles();
@@ -126,8 +128,6 @@ public class FTPHandler {
 				ftpvo.setUploadFileNameList(fileName);
 			}
 		}
-
-		return ftpvo.getUploadFileNameList();
 	}
 
 	/**

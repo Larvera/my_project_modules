@@ -52,6 +52,7 @@ public class FTPUtil {
 
 			// 연결 성공 응답 코드 확인
             int reply = client.getReplyCode();
+
             isConnected = FTPReply.isPositiveCompletion(reply);
             if (isConnected == false) {
             	client.disconnect();
@@ -59,14 +60,15 @@ public class FTPUtil {
             }
 
 		} catch (IOException ex) {
+			System.out.println("##connect exception## remoteIp=" + remoteIp + ", port=" + port);
+			ex.printStackTrace();
+
 			if(client.isConnected()) {
                 try {
                 	client.disconnect();
                 } catch(IOException f) {}
             }
 
-			System.out.println("##connect exception## remoteIp=" + remoteIp + ", port=" + port);
-			ex.printStackTrace();
 			throw ex;
 		}
 
