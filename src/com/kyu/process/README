@@ -1,0 +1,9 @@
+
+waitFor() 를 실행하면 명령어가 수행이 끝날때까지 대기한다.
+간혹 해당 코드 라인에서 무한정 대기할 수 있는데 이를 방지하기 위해서는 waitFor 수행 전에 Process 버퍼를 비워야 한다.
+
+getInputStream(), getErrorStream() 이 순차대로 발생하지 않는다.
+에러이면 getInputStream read() 가 null 이고 getErrorStream 의 read() 데이터가 있기에 순차대로 처리 되지만
+혼합되어 나올 경우 (자바 프로그램을 실행할 경우) 에는 getInputStream 의 read() 에서 락이 걸린다.
+
+이렇게 에러메세지와 출력메세지가 혼합해서 나오는 프로그램을 실행할 경우에는 락이 걸리지 않도록 스트림을 비워줘야 한다.
