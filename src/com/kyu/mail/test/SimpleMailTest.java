@@ -15,7 +15,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.kyu.common.Conf;
-import com.kyu.mail.SMTPAuthenticator;
 
 public class SimpleMailTest {
 
@@ -31,7 +30,7 @@ public class SimpleMailTest {
 		props.setProperty("mail.host", Conf.getValue("mail.host"));
 		// props.setProperty("mail.port", "587");
 
-		SMTPAuthenticator smtpAuthenticator = new SMTPAuthenticator(Conf.getValue("mail.smtp.user"), Conf.getValue("mail.smtp.password"));
+		//SMTPAuthenticator smtpAuthenticator = new SMTPAuthenticator(Conf.getValue("mail.smtp.user"), Conf.getValue("mail.smtp.password"));
 
 		Session mailSession = Session.getDefaultInstance(props, null);
 		mailSession.setDebug(true);

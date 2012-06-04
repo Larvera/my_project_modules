@@ -24,8 +24,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import com.kyu.common.Conf;
-
 /**
  * @FileName : MailSender.java
  * @Project : sample_project
@@ -191,9 +189,9 @@ public class MailSender {
 	private MimeMessage createMimeMessage() {
 		Properties props = makeProp();
 
-		String userId = Conf.getValue("mail.smtp.user");
-		String password = Conf.getValue("mail.smtp.password");
-		SMTPAuthenticator smtpAuthenticator = new SMTPAuthenticator(userId, password); // SMTP 인증 정보 객체
+		//String userId = Conf.getValue("mail.smtp.user");
+		//String password = Conf.getValue("mail.smtp.password");
+		//SMTPAuthenticator smtpAuthenticator = new SMTPAuthenticator(userId, password); // SMTP 인증 정보 객체
 
 		Session mailSession = Session.getDefaultInstance(props, null); // SMTP 서버의 연결 세션 객체 생성
 		mailSession.setDebug(DEBUG);
