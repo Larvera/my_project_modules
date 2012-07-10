@@ -5,36 +5,47 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * @FileName : VoFileCreator.java
+ * @Project : sample_project
+ * @Date : 2012. 7. 9.
+ * @작성자 : 이남규
+ * @프로그램설명 :
+ */
 public class VoFileCreator {
 
-	private static VoFileCreator voFileCreat = new VoFileCreator();
+	/** root directory */
+	private final String rootPath = "C:/";
+	/** 파일 이름 */
+	private String fileName;
 
-	private VoFileCreator() {
-	} 
-
-	public static VoFileCreator getInstance() {
-		return voFileCreat;
-	}
-
-	String rootPath = "C:/"; // 루트 디렉토리
-	String filename;
-
-
-	public void createFile(String generatorVo, String tableName) {
-		filename = tableName + ".java";
-
+	/**
+	 * <pre>
+	 * createFile
+	 * VO 파일 생성
+	 * <pre>
+	 * @param generatorVO
+	 * @param tableName
+	 */
+	public void createFile(String generatorVO, String tableName) {
+		fileName = tableName + ".java";
+		BufferedWriter bw = null;
 		try {
-			File file = new File(rootPath, filename);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			File file = new File(rootPath, fileName);
+			bw = new BufferedWriter(new FileWriter(file));
 
-			bw.write(generatorVo);
+			bw.write(generatorVO);
 			bw.flush();
-			bw.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			e.getMessage();
-			
+		} catch (IOException ex) {
+			System.out.println("##createFile## (exception failed) rootPath=" + rootPath + ", fileName=" + fileName);
+			ex.printStackTrace();
+		} finally {
+			if (bw != null) {
+				try {
+					bw.close();
+				} catch (IOException e) {}
+			}
 		}
 	}
 

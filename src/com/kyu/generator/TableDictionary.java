@@ -1,81 +1,118 @@
 package com.kyu.generator;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import com.kyu.generator.db.DBType;
+import com.kyu.generator.db.Database;
+import com.kyu.generator.db.DatabaseFactory;
+import com.kyu.generator.db.QueryLoad;
 
 public class TableDictionary {
 
-	public ArrayList getTableList(String[] tableName) {
-		Connection con = null;
-		ResultSet rs = null;
+	/**
+	 * <pre>
+	 * getTableList
+	 * 테이블 컬럼 정보 추출
+	 *
+	 * <pre>
+	 * @param tableNames
+	 * @return
+	 */
+	public List<TableRowVO> getTableList(Map<String, List<String>> paramMap, DBType dbType) {
+		Connection conn = null;
+		ResultSet resultSet = null;
 		PreparedStatement pstmt = null;
-		ArrayList list = new ArrayList();
+		List<TableRowVO> tableRowList = new ArrayList<TableRowVO>();
 
 		try {
-			String jdbc_url = "jdbc:oracle:thin:@ip번호:SID명";
-			String db_id = "유저아이디";
-			String db_pwd = "패스워드";
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection(jdbc_url, db_id, db_pwd);
+			Database database = DatabaseFactory.createInstance(dbType);
+			conn = database.getConnection();
 
-			if (con != null) {
-				String params = "";
-				for (int i = 0; i < tableName.length; i++) {
-					if (tableName[i].toString().endsWith(",")) {
-						params += "'" + tableName[i].toString().substring(0, tableName[i].toString().length() - 1)
-								+ "',";
-					} else {
-						params += "'" + tableName[i].toString() + "',";
-					}
-					System.out.println("table name = " + tableName[i].toString());
-				}
+			if (conn != null) {
+				QueryLoad queryLoad = new QueryLoad();
+				String sql = queryLoad.getQuery(dbType.getQueryId());
 
-				if (params.endsWith(",")) {
-					params = params.substring(0, params.length() - 1);
-				}
-				System.out.println("tables : " + params);
+				String resultQuery = paramMapping(paramMap, sql);
+				pstmt = conn.prepareStatement(resultQuery);
+				resultSet = pstmt.executeQuery();
 
-				String sql = "SELECT b.comments tableComments,  " + "       a.table_name tableName,    "
-						+ "       c.comments columnComments, " + "       a.column_name columns,     "
-						+ "       (CASE a.nullable WHEN 'Y' THEN 'Y' END) nullFlag , "
-						+ "       a.data_type dataType , " + "       a.data_length dataLength , "
-						+ "       a.column_id columnId "
-						+ "  FROM user_tab_columns a, user_tab_comments b, user_col_comments c "
-						+ " WHERE (a.table_name = b.table_name) "
-						+ "   AND (a.table_name = c.table_name AND a.column_name = c.column_name) "
-						+ "   AND b.table_type = 'TABLE'" + "   AND a.TABLE_NAME in (" + params.toUpperCase() + ")";
+				while (resultSet.next()) {
+					TableRowVO rowVO = new TableRowVO();
 
-				System.out.println("SQL : " + sql);
+					rowVO.setTableComment(resultSet.getString(1));
+					rowVO.setTableName(resultSet.getString(2));
+					rowVO.setColumnComment(resultSet.getString(3));
+					rowVO.setColumn(resultSet.getString(4));
+					rowVO.setDataType(resultSet.getString(5));
+					rowVO.setDataLength(resultSet.getString(6));
 
-				pstmt = con.prepareStatement(sql);
-				rs = pstmt.executeQuery();
-
-				while (rs.next()) {
-					TableInfo tbInfo = new TableInfo();
-
-					tbInfo.setTableComments(rs.getString(1));
-					tbInfo.setTableName(rs.getString(2));
-					tbInfo.setColumnComments(rs.getString(3));
-					tbInfo.setColumns(rs.getString(4));
-					tbInfo.setNullFlag(rs.getString(5));
-					tbInfo.setDataType(rs.getString(6));
-					tbInfo.setDataLength(rs.getString(7));
-					tbInfo.setColumnId(rs.getString(8));
-
-					list.add(tbInfo);
+					tableRowList.add(rowVO);
 				}
 			}
-			rs.close();
-			pstmt.close();
-			con.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			System.out.println("##getTableList## (exception failed)");
+			ex.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
 		}
 
-		return list;
+		return tableRowList;
+	}
+
+	/**
+	 * <pre>
+	 * makeParam
+	 *
+	 * <pre>
+	 * @param tableNames
+	 * @return
+	 */
+	private String makeParam(List<String> tableNames) {
+		StringBuilder tableBuf = new StringBuilder();
+		for (String tableName : tableNames) {
+			tableBuf.append("'");
+			tableBuf.append(tableName);
+			tableBuf.append("'");
+			tableBuf.append(",");
+		}
+
+		String paramInfo = tableBuf.toString();
+		String param = paramInfo.substring(0, paramInfo.length() - 1);
+		return param;
+	}
+
+	/**
+	 * <pre>
+	 * getMessageMaping
+	 *
+	 * <pre>
+	 * @param paramMap
+	 * @param query
+	 * @return
+	 */
+	private String paramMapping(Map<String, List<String>> paramMap, String sql) {
+		Iterator<String> iterator = paramMap.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			List<String> paramList = paramMap.get(key);
+			String param = makeParam(paramList);
+
+			sql = sql.replace("#" + key + "#", param);
+		}
+
+		return sql;
 	}
 }

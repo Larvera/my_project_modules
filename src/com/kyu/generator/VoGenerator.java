@@ -1,35 +1,85 @@
 package com.kyu.generator;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.naming.NamingException;
+import com.kyu.common.Conf;
+import com.kyu.generator.db.DBType;
 
-public class VoGenerator { 
 
-	public static void main(String[] args) throws SQLException, NamingException {
-		
-		// 테이블 정보를 가져온다 
+/**
+ * @FileName : VoGenerator.java
+ * @Project : sample_project
+ * @Date : 2012. 7. 9.
+ * @작성자 : 이남규
+ * @프로그램설명 :
+ */
+public class VoGenerator {
+
+	/**
+	 * <pre>
+	 * main
+	 *
+	 * <pre>
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		Conf.init();
+
+		VoGenerator generator = new VoGenerator();
+		generator.job();
+	}
+
+	/**
+	 * <pre>
+	 * job
+	 *
+	 * <pre>
+	 * @param tableNames
+	 */
+	public void job() {
+		// param 셋팅
+		Map<String, List<String>> paramMap = makeTableNames();
+
+		// table 리스트 추출
 		TableDictionary dictionary = new TableDictionary();
-		ArrayList list = dictionary.getTableList(args);
-		
-		/*
-		for (int idx = 0; idx < list.size(); idx++) {
-			System.out.println("list idx : " + idx);
-			System.out.println("list 테이블명 : " + ((TableInfo)list.get(idx)).getTableComments());
-			System.out.println("list 영문테이블명 : " + ((TableInfo)list.get(idx)).getTableName());
-			System.out.println("list 컬럼명 : " + ((TableInfo)list.get(idx)).getColumnComments());
-			System.out.println("list 컬럼 : " + ((TableInfo)list.get(idx)).getColumns());
-			System.out.println("list 널체크 : " + ((TableInfo)list.get(idx)).getNullFlag());
-			System.out.println("list 타입 : " + ((TableInfo)list.get(idx)).getDataType());
-			System.out.println("list 길이 : " + ((TableInfo)list.get(idx)).getDataLength());
-			System.out.println("list 오더 : " + ((TableInfo)list.get(idx)).getColumnId());
-		}
-		*/
+		List<TableRowVO> tableRowList = dictionary.getTableList(paramMap, DBType.MYSQL);
+
+		// table 정보 추출
 		CodeGenerator code = new CodeGenerator();
-		String generatorVo = code.createCode(list);
-		System.out.println("Generator Value Object = \n\n" + generatorVo);
-		VoFileCreator.getInstance().createFile(generatorVo, code.getClassName());
-		//t_notice, t_agent_ip_info, t_code_mast
+		String generatorVO = code.createCode(tableRowList);
+
+		// VO 파일 생성
+		String javaFileName = code.getClassName();
+		new VoFileCreator().createFile(generatorVO, javaFileName);
+
+		System.out.println("##job## (Finished VO File) javaFileName=" + javaFileName);
+	}
+
+	/**
+	 * <pre>
+	 * makeTableNames
+	 *
+	 * <pre>
+	 * @return
+	 */
+	private Map<String, List<String>> makeTableNames() {
+		Map<String, List<String>> paramMap = new HashMap<String, List<String>>();
+
+		// table names
+		List<String> tableNames = new ArrayList<String>();
+		tableNames.add("TBL_ADS_MASTER");
+
+		// schema names
+		List<String> schemaNames = new ArrayList<String>();
+		schemaNames.add("TAD");
+		schemaNames.add("TAD_LOG");
+
+		paramMap.put("tableName", tableNames);
+		paramMap.put("schemaName", schemaNames);
+		return paramMap;
 	}
 }

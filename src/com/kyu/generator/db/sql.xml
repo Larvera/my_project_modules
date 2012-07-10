@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<!-- mysql query -->
+	<sql id="mysqlQuery">
+		SELECT A.TABLE_COMMENT
+			 , A.TABLE_NAME
+			 , B.COLUMN_COMMENT
+			 , B.COLUMN_NAME
+			 , B.DATA_TYPE
+			 , B.CHARACTER_MAXIMUM_LENGTH
+		  FROM (
+				SELECT TABLE_SCHEMA
+					 , TABLE_NAME
+					 , TABLE_COMMENT
+				  FROM INFORMATION_SCHEMA.TABLES
+				 WHERE TABLE_SCHEMA IN (#schemaName#)
+				   AND TABLE_NAME IN (#tableName#)
+				) A INNER JOIN
+				(
+				SELECT TABLE_SCHEMA
+					 , TABLE_NAME
+					 , COLUMN_NAME
+					 , DATA_TYPE
+					 , CHARACTER_MAXIMUM_LENGTH
+					 , COLUMN_COMMENT
+				  FROM INFORMATION_SCHEMA.COLUMNS
+				 WHERE TABLE_SCHEMA IN (#schemaName#)
+				   AND TABLE_NAME IN (#tableName#)
+				) B ON A.TABLE_NAME = B.TABLE_NAME
+	</sql>
+</root>
