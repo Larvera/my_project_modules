@@ -14,8 +14,6 @@ import com.kyu.common.Conf;
  */
 public class MysqlDatabase implements Database {
 
-	/** driver */
-	private final String driver;
 	/** JDBC URL */
 	private final String jdbcUrl;
 	/** 유저 아이디 */
@@ -27,10 +25,9 @@ public class MysqlDatabase implements Database {
 	 * 생성자
 	 */
 	public MysqlDatabase() {
-		driver = Conf.getValue("db.mysql.jdbc.driver");
-		jdbcUrl = Conf.getValue("db.mysql.jdbc.url");
-		userId = Conf.getValue("db.mysql.jdbc.username");
-		password = Conf.getValue("db.mysql.jdbc.password");
+		jdbcUrl = Conf.getValue("mysql.jdbc.url");
+		userId = Conf.getValue("mysql.jdbc.username");
+		password = Conf.getValue("mysql.jdbc.password");
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +37,7 @@ public class MysqlDatabase implements Database {
 	public Connection getConnection() {
 		Connection conn = null;
 		try {
-			Class.forName(driver);
+			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(jdbcUrl, userId, password);
 		} catch (Exception ex) {
 			System.out.println("##getConnection## exception failed");
