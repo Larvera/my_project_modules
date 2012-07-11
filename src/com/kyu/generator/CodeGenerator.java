@@ -33,40 +33,35 @@ public class CodeGenerator {
 		code.append(className + " { \n");
 
 		// member field 생성
-		for (TableRowVO tableVO : tableRowList) {
-			String dataType = getDataType(tableVO);
-			String columnName = tableVO.getColumn().toLowerCase();
-			String columnComment = tableVO.getColumnComment();
+		for (TableRowVO rowVO : tableRowList) {
+			String dataType = getDataType(rowVO.getDataType());
+			String columnName = rowVO.getColumn().toLowerCase();
+			String chnageColumnName = changeColumnName(columnName);
+			String columnComment = rowVO.getColumnComment();
 
 			if (columnComment != null) {
 				code.append("\t/** " + columnComment + " */ \n");
 			} else {
 				code.append("\n");
 			}
-			code.append("\tprivate " + dataType + " " + columnName + ";\n");
-			code.append("\n ");
+			code.append("\tprivate " + dataType + " " + chnageColumnName + ";\n");
 		}
+		code.append("\n ");
 
 		// setter, getter 생성
 		for (TableRowVO rowVO : tableRowList) {
-			String dataType = getDataType(rowVO);
+			String dataType = getDataType(rowVO.getDataType());
 			String columnName = rowVO.getColumn().toLowerCase();
-			String columnComment = rowVO.getColumnComment();
+			String changeColumnName = changeColumnName(columnName);
 
 			// setter
-			code.append("\tpublic void set" + changeInitCap(columnName) + "(" + dataType + " " + columnName + ") { \n");
-			code.append("\t\tthis." + columnName + " = " + columnName + ";\n");
-			code.append("\t}\n");
-
-			if (columnComment != null) {
-				code.append("\t/** " + columnComment + " */ \n");
-			} else {
-				code.append("\n");
-			}
+			code.append("\tpublic void set" + changeInitCap(changeColumnName) + "(" + dataType + " " + changeColumnName + ") { \n");
+			code.append("\t\tthis." + changeColumnName + " = " + changeColumnName + ";\n");
+			code.append("\t}\n\n");
 
 			// getter
-			code.append("\tpublic " + dataType + " get" + changeInitCap(columnName) + "() { \n");
-			code.append("\t\treturn " + columnName + ";\n");
+			code.append("\tpublic " + dataType + " get" + changeInitCap(changeColumnName) + "() { \n");
+			code.append("\t\treturn " + changeColumnName + ";\n");
 			code.append("\t}\n\n");
 		}
 
@@ -83,9 +78,8 @@ public class CodeGenerator {
 	 * @param dataType
 	 * @return
 	 */
-	private String getDataType(TableRowVO tableVO) {
+	private String getDataType(String type) {
 		String dataType = null;
-		String type = tableVO.getDataType();
 
 		if (type.startsWith("int")) {
 			dataType = "int";
@@ -114,6 +108,40 @@ public class CodeGenerator {
 		char[] arrChar = str.toCharArray();
 		arrChar[0] = Character.toUpperCase(arrChar[0]);
 		return String.valueOf(arrChar);
+	}
+
+	/**
+	 * <pre>
+	 * getColumnName
+	 * 컬럼에 존재하는 _ 삭제 후 그 다음 문자열 대문자로 치환
+	 * <pre>
+	 * @param column
+	 * @return
+	 */
+	private String changeColumnName(String column) {
+		int idx = 0;
+		boolean isUpperCase = false;
+
+		char[] resultChar = new char[column.length()];
+		char[] columnChar = column.toCharArray();
+
+		for (char ch : columnChar) {
+			if (ch == '_') {
+				isUpperCase = true;
+				continue;
+			}
+
+			if (isUpperCase) {
+				resultChar[idx] = Character.toUpperCase(ch);
+				isUpperCase = false;
+			} else {
+				resultChar[idx] = ch;
+			}
+			idx++;
+		}
+
+		String str = String.valueOf(resultChar).trim();
+		return str;
 	}
 
 }
