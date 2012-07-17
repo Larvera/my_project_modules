@@ -9,11 +9,11 @@ import java.util.List;
  * @Project : sample_project
  * @Date : 2012. 7. 11.
  * @작성자 : 이남규
- * @프로그램설명 :
+ * @프로그램설명 : 테스트 데이터 DAO
  */
 public class FileDataDAO {
 
-	private final static int LOOP_CNT = 100000;
+	private final static int LOOP_CNT = 117;
 
 	private final List<TableRowDataVO> dataList = new ArrayList<TableRowDataVO>();
 
@@ -34,7 +34,7 @@ public class FileDataDAO {
 		for (int i = 0; i < LOOP_CNT; i++) {
 			TableRowDataVO rowDataVO = new TableRowDataVO();
 			rowDataVO.setClick(100);
-			rowDataVO.setImp(100000);
+			rowDataVO.setImp(i + 1);
 			rowDataVO.setCtr(0.3);
 			rowDataVO.setName("광고");
 			rowDataVO.setRegDate(new Date());
@@ -59,11 +59,31 @@ public class FileDataDAO {
 	 * getRowData
 	 *
 	 * <pre>
+	 * @param paramVO
 	 * @return
 	 */
-	public List<TableRowDataVO> getRowData() {
-		List<TableRowDataVO> dataList = new ArrayList<TableRowDataVO>();
+	public List<TableRowDataVO> getRowData(TableRowDataVO paramVO) {
+		List<TableRowDataVO> subList = dataList.subList(paramVO.getStartRowIndex(), paramVO.getLimitSize());
+		return subList;
+	}
 
-		return dataList;
+	/**
+	 * <pre>
+	 * main
+	 *
+	 * <pre>
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		List<String> test = new ArrayList<String>();
+		test.add("1");
+		test.add("2");
+		test.add("3");
+		test.add("4");
+		test.add("5");
+		test.add("6");
+
+		List<String> subList = test.subList(1, 3);
+		System.out.println(subList);
 	}
 }

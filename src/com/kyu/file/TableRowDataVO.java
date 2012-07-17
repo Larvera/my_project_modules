@@ -7,7 +7,7 @@ import java.util.Date;
  * @Project : sample_project
  * @Date : 2012. 7. 11.
  * @작성자 : 이남규
- * @프로그램설명 :
+ * @프로그램설명 : 테스트용 VO
  */
 public class TableRowDataVO {
 
@@ -16,6 +16,24 @@ public class TableRowDataVO {
 	private String name;
 	private double ctr;
 	private Date regDate;
+	private int startRowIndex;
+	private int limitSize;
+
+	public int getStartRowIndex() {
+		return startRowIndex;
+	}
+
+	public void setStartRowIndex(int startRowIndex) {
+		this.startRowIndex = startRowIndex;
+	}
+
+	public int getLimitSize() {
+		return limitSize;
+	}
+
+	public void setLimitSize(int limitSize) {
+		this.limitSize = limitSize;
+	}
 
 	public long getImp() {
 		return imp;
