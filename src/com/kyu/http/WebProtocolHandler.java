@@ -34,9 +34,9 @@ public class WebProtocolHandler {
 
 		// sendType에 따른 객체 생성
 		WebProtocol webProtocol = null;
-		if (sendType.equals(SendType.SSL)) {
+		if (sendType == SendType.SSL) {
 			webProtocol = new SSLSender(url);
-		} else if (sendType.equals(SendType.HTTP)) {
+		} else if (sendType == SendType.HTTP) {
 			webProtocol = new HttpSender(url);
 		}
 

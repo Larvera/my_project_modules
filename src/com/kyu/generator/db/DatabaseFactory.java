@@ -20,9 +20,9 @@ public class DatabaseFactory {
 	 */
 	public static Database createInstance(DBType dbType) {
 		Database database = null;
-		if (DBType.ORACLE.equals(dbType)) { // oracle
+		if (DBType.ORACLE == dbType) { // oracle
 			database = new OracleDatabase();
-		} else if (DBType.MYSQL.equals(dbType)) { // mysql
+		} else if (DBType.MYSQL == dbType) { // mysql
 			database = new MysqlDatabase();
 		}
 		return database;
