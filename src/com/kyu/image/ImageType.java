@@ -65,12 +65,40 @@ public enum ImageType {
 		}
 	};
 
+	/**
+	 * <pre>
+	 * imageSizeList
+	 * 사이즈 리스트
+	 * <pre>
+	 * @return
+	 */
 	public abstract List<String> imageSizeList();
 
+	/**
+	 * <pre>
+	 * validWidthSize
+	 * 유효성 검사 가로 사이즈
+	 * <pre>
+	 * @return
+	 */
 	public abstract int validWidthSize();
 
+	/**
+	 * <pre>
+	 * validHeightSize
+	 * 유효성 검사 세로 사이즈
+	 * <pre>
+	 * @return
+	 */
 	public abstract int validHeightSize();
 
+	/**
+	 * <pre>
+	 * imgFormat
+	 * 이미지 format (JPG, PNG 등)
+	 * <pre>
+	 * @return
+	 */
 	public abstract String imgFormat();
 
 }
