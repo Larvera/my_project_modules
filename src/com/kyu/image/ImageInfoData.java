@@ -1,4 +1,5 @@
-package com.kyu.image.core;
+package com.kyu.image;
+
 
 /**
  * @FileName : ImageInfoData.java
