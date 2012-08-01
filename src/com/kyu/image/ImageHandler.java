@@ -1,6 +1,5 @@
 package com.kyu.image;
 
-import java.io.IOException;
 
 /**
  * @FileName : ImageHandler.java
@@ -31,7 +30,7 @@ public class ImageHandler {
 				resizer.process(data); // 이미지 resize
 			}
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			System.out.println("##job## (exception failed) data=" + data);
 			isSuccess = false;
 		}

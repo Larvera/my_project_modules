@@ -1,9 +1,9 @@
 package com.kyu.image;
 
-import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class ImageResizer {
 		}
 
 		System.out.println("##valid## isSuccess=" + isSuccess + ", originWidth=" + originWidth + ", originHeight=" + originHeight + ", validWidth=" + validWidth + ", validHeight=" + validHeight + ", orgImgPath=" + orgImgPath);
-		return isSuccess;
+		return true;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class ImageResizer {
 	 * @param data
 	 * @throws IOException
 	 */
-	public void process(ImageInfoData data) throws IOException {
+	public void process(ImageInfoData data) throws Exception {
 		int type = getImgType();
 		String imgFormat = data.getImageType().imgFormat();
 		List<String> imgSizeList = data.getImageType().imageSizeList();
@@ -78,7 +78,7 @@ public class ImageResizer {
 			int height = sizeMap.get("height");
 
 			// 이미지 리사이즈
-			BufferedImage resizeImage = resizeImage(type, width, height);
+			BufferedImage resizeImage = resizeImageHighQuality(type, width, height);
 
 			// 이미지 파일 생성
 			String destResizeImgFilePath = makeDestImgFilePath(data, size);
@@ -90,47 +90,48 @@ public class ImageResizer {
 	/**
 	 * <pre>
 	 * resizeImage
-	 * 이미지 리사이징
+	 * 이미지 리사이즈
+	 * 빠른 속도로 이미지 크기 변환을 처리하지만 새롭게 생성된 이미지의 품질이 떨어진다.
 	 * <pre>
 	 * @param type
 	 * @param width
 	 * @param height
 	 * @return
+	 * @throws InterruptedException
 	 */
-	private BufferedImage resizeImage(int type, int width, int height) {
-		BufferedImage resizedImage = new BufferedImage(width, height, type);
-		Graphics2D g = resizedImage.createGraphics();
-		g.drawImage(originalImage, 0, 0, width, height, null);
-		g.dispose();
+	private BufferedImage resizeImage(int type, int width, int height) throws Exception {
+		BufferedImage destImg = new BufferedImage(width, height, type);
+		Graphics2D graphics2d = destImg.createGraphics();
+		graphics2d.drawImage(originalImage, 0, 0, width, height, null);
+		graphics2d.dispose();
 
-		return resizedImage;
+		return destImg;
 	}
-
 
 	/**
 	 * <pre>
-	 * resizeImageWithHint
-	 * 이미지 리사이즈
+	 * resizeImageHighQuality
+	 * 이미지 리사이즈 (원본 품질 유지)
+	 * getScaledInstance 함수를 통해 이미지 크기 변환을 하면 변환된 이미지의 품질이 떨어지지 않는다.
+	 * Image.SCALE_SMOOTH를 이용하면 새롭게 생성된 이미지의 품질이 떨어지지 않게 된다.
 	 * <pre>
 	 * @param type
 	 * @param width
 	 * @param height
 	 * @return
+	 * @throws Exception
 	 */
-	@Deprecated
-	@SuppressWarnings("unused")
-	private BufferedImage resizeImageWithHint(int type, int width, int height) {
-		BufferedImage resizedImage = new BufferedImage(width, height, type);
-		Graphics2D g = resizedImage.createGraphics();
-		g.drawImage(originalImage, 0, 0, width, height, null);
-		g.dispose();
-		g.setComposite(AlphaComposite.Src);
+	private BufferedImage resizeImageHighQuality(int type, int width, int height) throws Exception {
+		Image image = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+	    int pixels[] = new int[width * height];
+	    PixelGrabber pixelGrabber = new PixelGrabber(image, 0, 0, width, height, pixels, 0, width);
+	    pixelGrabber.grabPixels();
 
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	    // image 객체로부터 픽셀 정보를 읽어온 후, BufferedImage에 채워 넣어주면 이미지 크기 변환이 된다.
+        BufferedImage destImg = new BufferedImage(width, height, type);
+        destImg.setRGB(0, 0, width, height, pixels, 0, width);
 
-		return resizedImage;
+		return destImg;
 	}
 
 	/**
@@ -159,7 +160,8 @@ public class ImageResizer {
 	/**
 	 * <pre>
 	 * getImgType
-	 *
+	 * BufferedImage.TYPE_INT_RGB 이면, 배경색이 검정
+	 * BufferedImage.TYPE_INT_ARGB 이면, 배경색이 투명
 	 * <pre>
 	 * @return
 	 */

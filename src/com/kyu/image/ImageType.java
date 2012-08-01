@@ -17,26 +17,27 @@ public enum ImageType {
 		@Override
 		public List<String> imageSizeList() {
 			List<String> imageSizeList = new ArrayList<String>();
-			imageSizeList.add("100x200");
+			imageSizeList.add("128x128");
 			imageSizeList.add("200x300");
 			imageSizeList.add("400x500");
 			imageSizeList.add("800x120");
+			imageSizeList.add("1024x768");
 			return imageSizeList;
 		}
 
 		@Override
 		public int validWidthSize() {
-			return 800;
+			return 1024;
 		}
 
 		@Override
 		public int validHeightSize() {
-			return 120;
+			return 768;
 		}
 
 		@Override
 		public String imgFormat() {
-			return "jpg";
+			return "png";
 		}
 	}
 	// 전면 배너

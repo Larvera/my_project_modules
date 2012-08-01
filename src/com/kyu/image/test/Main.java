@@ -37,7 +37,7 @@ public class Main {
 	public static ImageInfoData makeDate() {
 		ImageInfoData data = new ImageInfoData();
 		data.setImageType(ImageType.BAR_BANNER);
-		data.setOrgImgPath("E:\\test\\resize\\resizeTest.jpg");
+		data.setOrgImgPath("E:\\test\\resize\\001.bmp");
 		return data;
 	}
 }
