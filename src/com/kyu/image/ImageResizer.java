@@ -99,6 +99,8 @@ public class ImageResizer {
 	 * @return
 	 * @throws InterruptedException
 	 */
+	@Deprecated
+	@SuppressWarnings("unused")
 	private BufferedImage resizeImage(int type, int width, int height) throws Exception {
 		BufferedImage destImg = new BufferedImage(width, height, type);
 		Graphics2D graphics2d = destImg.createGraphics();
@@ -199,5 +201,12 @@ public class ImageResizer {
 		destFilePathBuf.append(imgFormat);
 
 		return destFilePathBuf.toString();
+	}
+
+	public static void main(String[] args) {
+		String[] test = ImageIO.getReaderMIMETypes();
+		for (String str : test) {
+			System.out.println(str);
+		}
 	}
 }
