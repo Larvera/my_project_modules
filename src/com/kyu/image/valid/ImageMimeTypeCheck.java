@@ -1,0 +1,60 @@
+package com.kyu.image.valid;
+
+import java.io.File;
+
+import net.sf.jmimemagic.Magic;
+import net.sf.jmimemagic.MagicMatch;
+
+import com.kyu.image.core.ImageInfoData;
+import com.kyu.image.core.ImageValid;
+
+/**
+ * @FileName : ImageMimeTypeCheck.java
+ * @Project : sample_project
+ * @Date : 2012. 8. 9.
+ * @작성자 : 이남규
+ * @프로그램설명 :
+ */
+public class ImageMimeTypeCheck implements ImageValid {
+
+	/**
+	 * mimeType 체크
+	 */
+	@Override
+	public boolean valid(ImageInfoData data) throws Exception {
+		// 원본 이미지 path
+		String orgImgPath = data.getOrgImgPath();
+
+		// mimeType 추출
+		MagicMatch match = Magic.getMagicMatch(new File(orgImgPath), true);
+		String mimeType = match.getMimeType();
+
+		// image format 추출
+		String format = makeFormat(data);
+
+		// mimeType 같으면 성공
+		if (mimeType.equals(format)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * <pre>
+	 * makeFormat
+	 *
+	 * <pre>
+	 * @param data
+	 * @return
+	 */
+	private String makeFormat(ImageInfoData data) {
+		String format = data.getImageType().imgFormat();
+		StringBuilder formatBuf = new StringBuilder();
+		formatBuf.append("image/");
+		formatBuf.append(format);
+
+		return formatBuf.toString();
+	}
+
+}

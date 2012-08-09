@@ -1,4 +1,4 @@
-package com.kyu.image;
+package com.kyu.image.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,12 @@ public enum ImageType {
 
 		@Override
 		public int validWidthSize() {
-			return 1024;
+			return 128;
 		}
 
 		@Override
 		public int validHeightSize() {
-			return 768;
+			return 128;
 		}
 
 		@Override

@@ -1,4 +1,4 @@
-package com.kyu.image;
+package com.kyu.image.core;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 
+
 /**
  * @FileName : AbstractImageResizer.java
  * @Project : sample_project
@@ -23,39 +24,21 @@ import javax.imageio.ImageIO;
 public class ImageResizer {
 
 	/** 원본 이미지 객체 */
-	private BufferedImage originalImage;
-	/** 원본 이미지 가로 사이즈 */
-	private int originWidth;
-	/** 원본 이미지 세로 사이즈 */
-	private int originHeight;
+	private final BufferedImage originalImage;
+	/** 원본 이미지 path */
+	private final String orgImgPath;
+	/** image type enum */
+	private final ImageType imageType;
+
 
 	/**
-	 * <pre>
-	 * sizeCheck
-	 * 원본 이미지 가로, 세로 사이즈 체크
-	 * <pre>
-	 * @param orgImgPath
-	 * @return
+	 * constructor
 	 * @throws IOException
 	 */
-	public boolean sizeCheck(String orgImgPath) throws IOException {
-		boolean isSuccess = false;
-
+	public ImageResizer(ImageInfoData data) throws IOException {
+		orgImgPath = data.getOrgImgPath();
+		imageType = data.getImageType();
 		originalImage = ImageIO.read(new File(orgImgPath));
-		originWidth = originalImage.getWidth();
-		originHeight = originalImage.getHeight();
-
-		// validation width, height 정보
-		int validWidth = ImageType.BAR_BANNER.validWidthSize();
-		int validHeight = ImageType.BAR_BANNER.validHeightSize();
-
-		// validation check
-		if (originWidth == validWidth && originHeight == validHeight) {
-			isSuccess = true;
-		}
-
-		System.out.println("##valid## isSuccess=" + isSuccess + ", originWidth=" + originWidth + ", originHeight=" + originHeight + ", validWidth=" + validWidth + ", validHeight=" + validHeight + ", orgImgPath=" + orgImgPath);
-		return true;
 	}
 
 	/**
@@ -66,10 +49,11 @@ public class ImageResizer {
 	 * @param data
 	 * @throws IOException
 	 */
-	public void process(ImageInfoData data) throws Exception {
+	public void process() throws Exception {
+
 		int type = getImgType();
-		String imgFormat = data.getImageType().imgFormat();
-		List<String> imgSizeList = data.getImageType().imageSizeList();
+		String imgFormat = imageType.imgFormat();
+		List<String> imgSizeList = imageType.imageSizeList();
 
 		for (String size : imgSizeList) {
 			// 가로, 세로 사이즈 추출
@@ -81,7 +65,7 @@ public class ImageResizer {
 			BufferedImage resizeImage = resizeImageHighQuality(type, width, height);
 
 			// 이미지 파일 생성
-			String destResizeImgFilePath = makeDestImgFilePath(data, size);
+			String destResizeImgFilePath = makeDestImgFilePath(size);
 			File destFile = new File(destResizeImgFilePath);
 			ImageIO.write(resizeImage, imgFormat, destFile);
 		}
@@ -187,9 +171,8 @@ public class ImageResizer {
 	 * @param imgFormat
 	 * @param size
 	 */
-	private String makeDestImgFilePath(ImageInfoData data, String size) {
-		String orgImgPath = data.getOrgImgPath();
-		String imgFormat = data.getImageType().imgFormat();
+	private String makeDestImgFilePath(String size) {
+		String imgFormat = imageType.imgFormat();
 
 		int idx = orgImgPath.lastIndexOf(".");
 		String destFilePrefix = orgImgPath.substring(0, idx);

@@ -1,8 +1,8 @@
 package com.kyu.image.test;
 
 import com.kyu.image.ImageHandler;
-import com.kyu.image.ImageInfoData;
-import com.kyu.image.ImageType;
+import com.kyu.image.core.ImageInfoData;
+import com.kyu.image.core.ImageType;
 
 /**
  * @FileName : Main.java
@@ -37,7 +37,7 @@ public class Main {
 	public static ImageInfoData makeDate() {
 		ImageInfoData data = new ImageInfoData();
 		data.setImageType(ImageType.BAR_BANNER);
-		data.setOrgImgPath("E:\\test\\resize\\001.bmp");
+		data.setOrgImgPath("E:\\test\\resize\\img\\test.png");
 		return data;
 	}
 }
