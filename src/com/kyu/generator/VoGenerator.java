@@ -71,7 +71,7 @@ public class VoGenerator {
 
 		// table names
 		List<String> tableNames = new ArrayList<String>();
-		tableNames.add("TBL_ADS_HISTORY");
+		tableNames.add("TBL_ADS_TARGET");
 
 		// schema names
 		List<String> schemaNames = new ArrayList<String>();
