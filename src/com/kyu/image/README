@@ -8,3 +8,7 @@
 풍경 사진이 있는데 이 사진을 사람 눈으로 보기에 느끼지 못할 정도로 훼손시켜서 데이터 량을 줄인다.
 
 https://github.com/arimus/jmimemagic
+
+비윈도우 환경에서도 GUI 클래스를 사용할 수 있는 기능이 추가 (jdk 1.4부터)
+java -Djava.awt.headless=true
+프로퍼티의 값을 "true"로 지정하면 비윈도우 환경에서도 GUI 관련 클래스를 사용할 수 있다.
