@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jsee/web-jsptagLibrary_2_0.xsd"
+	version="2.0">
+
+	<description>hello</description>
+	<tlib-version>1.2</tlib-version>
+	<short-name>hello</short-name>
+	<uri>http://kyu.com/taglib/hello</uri>
+	<tag>
+		<name>greet</name>
+		<tag-class>com.kyu.component.test.tld.CustomTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>username</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue> <!-- 표현식<%=%>을 사용할 수 있는지 여부 -->
+		</attribute>
+	</tag>
+
+</taglib>
