@@ -3,6 +3,7 @@ package com.kyu.excel.generator;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import net.sf.jxls.transformer.XLSTransformer;
@@ -28,11 +29,29 @@ public class JXLSExcelGenerator extends AbstractExcelCore {
 		XLSTransformer transformer = new XLSTransformer();
 
 		// excel template read
-		String templateFilePath = Conf.getValue("excel.template.path") + excelFileName;
+		String templateFilePath = getExcelTemplatePath(Conf.getValue("excel.template.path"), excelFileName);
 		InputStream is = new BufferedInputStream(new FileInputStream(templateFilePath));
 
 		// excel workbook 생성
 		Map<String, Object> paramMap = data.createExcelParamMap();
 		workbook = transformer.transformXLS(is, paramMap);
+	}
+
+	/**
+	 * <pre>
+	 * getExcelTemplatePath
+	 *
+	 * <pre>
+	 * @param templatePath
+	 * @param excelFileName
+	 * @return
+	 */
+	private String getExcelTemplatePath(String templatePath, String excelFileName) {
+		StringBuilder path = new StringBuilder();
+		path.append(templatePath);
+		path.append(excelFileName);
+
+		URL url = getClass().getClassLoader().getResource(path.toString());
+		return url.getPath();
 	}
 }

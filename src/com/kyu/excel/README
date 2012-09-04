@@ -1,0 +1,5 @@
+## required jar file
+commons-beanutils-1.8.3.jar
+commons-collections-3.2.1.jar
+commons-digester-2.0.jar
+commons-jexl-2.0.1.jar

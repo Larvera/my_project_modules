@@ -66,10 +66,31 @@ public class ExcelHandler {
 		return true;
 	}
 
+	/**
+	 * <pre>
+	 * excelDownload
+	 *
+	 * <pre>
+	 * @param data
+	 * @param baseType
+	 * @param response
+	 * @return
+	 */
 	public boolean excelDownload(ExcelData data, ExcelBaseType baseType, HttpServletResponse response) {
 		return excelDownload(data, ExcelEnumOpenSourceType.JXLS, baseType, response);
 	}
 
+	/**
+	 * <pre>
+	 * excelDownload
+	 *
+	 * <pre>
+	 * @param data
+	 * @param excelType
+	 * @param baseType
+	 * @param response
+	 * @return
+	 */
 	public boolean excelDownload(ExcelData data, ExcelEnumOpenSourceType excelType, ExcelBaseType baseType, HttpServletResponse response) {
 		return false;
 	}
