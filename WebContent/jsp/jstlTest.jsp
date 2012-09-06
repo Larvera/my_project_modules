@@ -89,3 +89,5 @@ ${param.test}
 contextPath : ${pageContext.request.contextPath} <br/>
 cookieValue : ${cookie.test.value} <br/>
 requestURL : ${pageContext.request.requestURL} <br/>
+
+JSTL function : http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/fn/tld-summary.html <br/>
