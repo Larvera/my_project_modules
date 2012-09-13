@@ -42,7 +42,7 @@ public class DownloadHelper {
 			File file = new File(filePath);
 
 			// response header setting
-			setResponseHeader(response, file);
+			setResponseHeader(request, response, file);
 
 			// connection buffer
 			fileInputStream = new FileInputStream(file);
@@ -74,17 +74,35 @@ public class DownloadHelper {
 	 * @param file
 	 * @throws UnsupportedEncodingException
 	 */
-	private void setResponseHeader(HttpServletResponse response, File file) throws Exception {
+	private void setResponseHeader(HttpServletRequest request, HttpServletResponse response, File file) throws Exception {
 		int fileLength = (int) file.length();
 		String fileName = file.getName();
+		String mimeType = getMimeType(request, file);
 
-		response.setContentType("application/octet-stream; charset=" + CHARSET);
+		response.setContentType(mimeType + "; charset=" + CHARSET);
 		response.setHeader("Content-Disposition", "attachment; fileName=\"" + encodeFileName(fileName) + "\";");
 		response.setHeader("Content-Transfer-Encoding", "binary");
 
 		if (fileLength > 0) {
 			response.setContentLength(fileLength);
 		}
+
+	}
+
+	/**
+	 * <pre>
+	 * getMimeType
+	 * mimetype 추출
+	 * <pre>
+	 * @param request
+	 * @param file
+	 */
+	private String getMimeType(HttpServletRequest request, File file) {
+		String mimeType = request.getSession().getServletContext().getMimeType(file.getName());
+		if (mimeType == null || mimeType.length() == 0) {
+			mimeType = "application/octet-stream";
+		}
+		return mimeType;
 	}
 
 	/**
