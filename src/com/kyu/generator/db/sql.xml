@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<!-- mysql query -->
+	<!-- MYSQL query -->
 	<sql id="mysqlQuery">
 		SELECT A.TABLE_COMMENT
 			 , A.TABLE_NAME
@@ -28,4 +28,31 @@
 				   AND TABLE_NAME IN (#tableName#)
 				) B ON A.TABLE_NAME = B.TABLE_NAME
 	</sql>
+
+	<!-- 컬럼 리스트 -->
+	<sql id="columnList">
+		SELECT @RNUM:=@RNUM + 1 AS rowNum ,L.* FROM (SELECT @RNUM:=(0)) R,
+		(
+			SELECT COLUMN_NAME AS columnName
+		         , DATA_TYPE AS dataType
+		         , IF(DATA_TYPE = 'int', '11', IFNULL(CHARACTER_MAXIMUM_LENGTH, '')) AS dataTypeLength
+		         , IF(IS_NULLABLE = 'NO', 'NN', '') AS nn
+		         , COLUMN_KEY AS columnKey
+		         , IFNULL(COLUMN_DEFAULT, '') AS columnDefault
+		         , COLUMN_COMMENT AS columnComment
+		         , EXTRA AS extra
+		      FROM INFORMATION_SCHEMA.COLUMNS
+		     WHERE TABLE_NAME = #tableName#
+		       AND TABLE_SCHEMA = #schemaName#
+		) L
+	</sql>
+
+	<!-- 테이블 리스트 -->
+	<sql id="tableList">
+		SELECT TABLE_NAME
+		     , TABLE_COMMENT
+		  FROM INFORMATION_SCHEMA.TABLES
+		 WHERE TABLE_SCHEMA = #schemaName#
+	</sql>
+
 </root>

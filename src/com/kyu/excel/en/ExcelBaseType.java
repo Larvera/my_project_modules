@@ -10,10 +10,18 @@ package com.kyu.excel.en;
  */
 public enum ExcelBaseType {
 
+	// 캠페인
 	REPORT_CAMPAIGN("report_campaign.xls") {
 		@Override
 		public String downloadFileName() {
 			return "캠페인.xls";
+		}
+	}
+	// DB 스키마
+	, DB_SCHEMA("db_schema.xls") {
+		@Override
+		public String downloadFileName() {
+			return "DB.xls";
 		}
 	};
 
