@@ -58,7 +58,7 @@ public class ExcelHandler {
 			System.out.println("##createExcel## excelFileName=" + excelFileName + ", savePath=" + savePath);
 
 		} catch (Exception ex) {
-			System.out.println("##createExcel## (exception failed) data=" + data + ", excelType=" + excelType);
+			System.out.println("##createExcel## (exception failed) excelType=" + excelType);
 			ex.printStackTrace();
 			return false;
 		}
@@ -69,29 +69,41 @@ public class ExcelHandler {
 	/**
 	 * <pre>
 	 * excelDownload
-	 *
+	 * 엑셀 파일 다운로드 (default JXLS)
 	 * <pre>
 	 * @param data
 	 * @param baseType
 	 * @param response
-	 * @return
 	 */
-	public boolean excelDownload(ExcelData data, ExcelBaseType baseType, HttpServletResponse response) {
-		return excelDownload(data, ExcelEnumOpenSourceType.JXLS, baseType, response);
+	public void excelDownload(ExcelData data, ExcelBaseType baseType, HttpServletResponse response) {
+		excelDownload(data, ExcelEnumOpenSourceType.JXLS, baseType, response);
 	}
 
 	/**
 	 * <pre>
 	 * excelDownload
-	 *
+	 * 엑셀 파일 다운로드
 	 * <pre>
 	 * @param data
 	 * @param excelType
 	 * @param baseType
 	 * @param response
-	 * @return
 	 */
-	public boolean excelDownload(ExcelData data, ExcelEnumOpenSourceType excelType, ExcelBaseType baseType, HttpServletResponse response) {
-		return false;
+	public void excelDownload(ExcelData data, ExcelEnumOpenSourceType excelType, ExcelBaseType baseType, HttpServletResponse response) {
+		try {
+			ExcelCore core = ExcelFactory.createInstance(excelType);
+
+			// excel workbook 생성
+			String excelFileName = baseType.getExcelFileName();
+			core.createWorkBook(data, excelFileName);
+
+			// 엑셀 다운로드
+			core.downloadExcel(response, excelFileName);
+			System.out.println("##createExcel## excelFileName=" + excelFileName);
+
+		} catch (Exception ex) {
+			System.out.println("##createExcel## (exception failed) excelType=" + excelType);
+			ex.printStackTrace();
+		}
 	}
 }
