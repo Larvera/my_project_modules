@@ -1,7 +1,7 @@
 package com.kyu.excel.generator;
 
-import com.kyu.excel.core.AbstractExcelCore;
-import com.kyu.excel.core.ExcelData;
+import com.kyu.excel.core.make.AbstractExcelCore;
+import com.kyu.excel.core.make.ExcelData;
 
 /**
  * @FileName : JXLExcelGenerator.java

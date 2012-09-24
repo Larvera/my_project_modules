@@ -1,4 +1,4 @@
-package com.kyu.excel.en;
+package com.kyu.excel.enumtype;
 
 /**
  * @FileName : ExcelType.java
@@ -7,6 +7,7 @@ package com.kyu.excel.en;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
+@Deprecated
 public enum ExcelEnumOpenSourceType {
 	JXL, JXLS, POI
 }

@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kyu.common.Conf;
 import com.kyu.excel.ExcelHandler;
-import com.kyu.excel.en.ExcelBaseType;
+import com.kyu.excel.enumtype.ExcelBaseType;
+import com.kyu.excel.generator.JXLSExcelGenerator;
 import com.kyu.excel.test.DataVO;
 import com.kyu.excel.test.ReportVO;
 
@@ -35,12 +36,11 @@ public class ExcelDownload extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Conf.init();
-
-			ExcelHandler handler = new ExcelHandler();
 			ReportVO data = getData();
 
 			// excel download
-			handler.excelDownload(data, ExcelBaseType.REPORT_CAMPAIGN, response);
+			JXLSExcelGenerator excelGenerator = new JXLSExcelGenerator();
+			ExcelHandler.excelDownload(data, excelGenerator, ExcelBaseType.REPORT_CAMPAIGN, response);
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -9,8 +9,8 @@ import java.util.Map;
 import net.sf.jxls.transformer.XLSTransformer;
 
 import com.kyu.common.Conf;
-import com.kyu.excel.core.AbstractExcelCore;
-import com.kyu.excel.core.ExcelData;
+import com.kyu.excel.core.make.AbstractExcelCore;
+import com.kyu.excel.core.make.ExcelData;
 
 /**
  * @FileName : JXLSExcelGenerator.java

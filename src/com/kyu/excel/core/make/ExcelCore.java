@@ -1,4 +1,4 @@
-package com.kyu.excel.core;
+package com.kyu.excel.core.make;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,4 +42,5 @@ public interface ExcelCore {
 	 * @throws Exception
 	 */
 	public void writeExcel(String savePath) throws Exception;
+
 }

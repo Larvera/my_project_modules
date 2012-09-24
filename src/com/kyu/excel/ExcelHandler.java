@@ -1,13 +1,16 @@
 package com.kyu.excel;
 
+import java.io.InputStream;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import com.kyu.common.Conf;
-import com.kyu.excel.core.ExcelCore;
-import com.kyu.excel.core.ExcelData;
-import com.kyu.excel.core.ExcelFactory;
-import com.kyu.excel.en.ExcelBaseType;
-import com.kyu.excel.en.ExcelEnumOpenSourceType;
+import com.kyu.excel.core.make.ExcelCore;
+import com.kyu.excel.core.make.ExcelData;
+import com.kyu.excel.core.parse.ExcelParser;
+import com.kyu.excel.core.parse.ExcelValue;
+import com.kyu.excel.enumtype.ExcelBaseType;
 
 
 
@@ -23,19 +26,6 @@ public class ExcelHandler {
 	/**
 	 * <pre>
 	 * createExcel
-	 * 엑셀 파일 생성 (default JXLS)
-	 * <pre>
-	 * @param data
-	 * @param baseType
-	 * @return
-	 */
-	public boolean createExcel(ExcelData data, ExcelBaseType baseType) {
-		return createExcel(data, ExcelEnumOpenSourceType.JXLS, baseType);
-	}
-
-	/**
-	 * <pre>
-	 * createExcel
 	 * 엑셀 파일 생성
 	 * <pre>
 	 * @param data
@@ -43,40 +33,27 @@ public class ExcelHandler {
 	 * @param baseType
 	 * @return
 	 */
-	public boolean createExcel(ExcelData data, ExcelEnumOpenSourceType excelType, ExcelBaseType baseType) {
+	public static boolean createExcel(ExcelData data, ExcelCore core, ExcelBaseType baseType) {
+		String excelFileName = null;
+		String savePath = null;
 		try {
-			ExcelCore core = ExcelFactory.createInstance(excelType);
-
 			// excel workbook 생성
-			String excelFileName = baseType.getExcelFileName();
+			excelFileName = baseType.getExcelFileName();
 			core.createWorkBook(data, excelFileName);
 
 			// 엑셀 파일 생성
-			String savePath = Conf.getValue("excel.directory") + excelFileName;
+			savePath = Conf.getValue("excel.directory") + excelFileName;
 			core.writeExcel(savePath);
 
 			System.out.println("##createExcel## excelFileName=" + excelFileName + ", savePath=" + savePath);
 
 		} catch (Exception ex) {
-			System.out.println("##createExcel## (exception failed) excelType=" + excelType);
+			System.out.println("##createExcel## (exception failed) excelFileName=" + excelFileName + ", savePath=" + savePath);
 			ex.printStackTrace();
 			return false;
 		}
 
 		return true;
-	}
-
-	/**
-	 * <pre>
-	 * excelDownload
-	 * 엑셀 파일 다운로드 (default JXLS)
-	 * <pre>
-	 * @param data
-	 * @param baseType
-	 * @param response
-	 */
-	public void excelDownload(ExcelData data, ExcelBaseType baseType, HttpServletResponse response) {
-		excelDownload(data, ExcelEnumOpenSourceType.JXLS, baseType, response);
 	}
 
 	/**
@@ -89,12 +66,11 @@ public class ExcelHandler {
 	 * @param baseType
 	 * @param response
 	 */
-	public void excelDownload(ExcelData data, ExcelEnumOpenSourceType excelType, ExcelBaseType baseType, HttpServletResponse response) {
+	public static void excelDownload(ExcelData data, ExcelCore core, ExcelBaseType baseType, HttpServletResponse response) {
+		String excelFileName = null;
 		try {
-			ExcelCore core = ExcelFactory.createInstance(excelType);
-
 			// excel workbook 생성
-			String excelFileName = baseType.getExcelFileName();
+			excelFileName = baseType.getExcelFileName();
 			core.createWorkBook(data, excelFileName);
 
 			// 엑셀 다운로드
@@ -102,8 +78,24 @@ public class ExcelHandler {
 			System.out.println("##createExcel## excelFileName=" + excelFileName);
 
 		} catch (Exception ex) {
-			System.out.println("##createExcel## (exception failed) excelType=" + excelType);
+			System.out.println("##createExcel## (exception failed) excelFileName=" + excelFileName);
 			ex.printStackTrace();
 		}
+	}
+
+	/**
+	 * <pre>
+	 * parse
+	 * 엑셀 파싱
+	 * <pre>
+	 * @param excelStream
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<ExcelValue> parse(InputStream excelStream, Class<? extends ExcelValue> clazz) throws Exception {
+		ExcelParser parser = new ExcelParser();
+		List<ExcelValue> excelValueList = parser.parse(excelStream, clazz);
+		return excelValueList;
 	}
 }

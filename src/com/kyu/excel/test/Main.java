@@ -6,7 +6,8 @@ import java.util.List;
 
 import com.kyu.common.Conf;
 import com.kyu.excel.ExcelHandler;
-import com.kyu.excel.en.ExcelBaseType;
+import com.kyu.excel.enumtype.ExcelBaseType;
+import com.kyu.excel.generator.JXLSExcelGenerator;
 
 /**
  * @FileName : Main.java
@@ -39,9 +40,9 @@ public class Main {
 	 * <pre>
 	 */
 	public void job() {
-		ExcelHandler handler = new ExcelHandler();
 		ReportVO data = getData();
-		boolean isSuccess = handler.createExcel(data, ExcelBaseType.REPORT_CAMPAIGN);
+		JXLSExcelGenerator excelGenerator = new JXLSExcelGenerator();
+		boolean isSuccess = ExcelHandler.createExcel(data, excelGenerator, ExcelBaseType.REPORT_CAMPAIGN);
 		System.out.println("##job## isSuccess=" + isSuccess);
 	}
 

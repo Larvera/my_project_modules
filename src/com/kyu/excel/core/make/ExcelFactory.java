@@ -1,6 +1,6 @@
-package com.kyu.excel.core;
+package com.kyu.excel.core.make;
 
-import com.kyu.excel.en.ExcelEnumOpenSourceType;
+import com.kyu.excel.enumtype.ExcelEnumOpenSourceType;
 import com.kyu.excel.generator.JXLExcelGenerator;
 import com.kyu.excel.generator.JXLSExcelGenerator;
 import com.kyu.excel.generator.POIExcelGenerator;
@@ -12,6 +12,7 @@ import com.kyu.excel.generator.POIExcelGenerator;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
+@Deprecated
 public class ExcelFactory {
 
 	/**

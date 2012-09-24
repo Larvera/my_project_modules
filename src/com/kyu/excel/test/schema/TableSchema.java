@@ -13,7 +13,8 @@ import java.util.Map;
 
 import com.kyu.common.Conf;
 import com.kyu.excel.ExcelHandler;
-import com.kyu.excel.en.ExcelBaseType;
+import com.kyu.excel.enumtype.ExcelBaseType;
+import com.kyu.excel.generator.JXLSExcelGenerator;
 import com.kyu.generator.db.DBType;
 import com.kyu.generator.db.Database;
 import com.kyu.generator.db.DatabaseFactory;
@@ -62,8 +63,8 @@ public class TableSchema {
 		// 스키마 정보 추출
 		SchemaVO data = getSchema(paramMap, DBType.MYSQL);
 
-		ExcelHandler handler = new ExcelHandler();
-		boolean isSuccess = handler.createExcel(data, ExcelBaseType.DB_SCHEMA);
+		JXLSExcelGenerator excelGenerator = new JXLSExcelGenerator();
+		boolean isSuccess = ExcelHandler.createExcel(data, excelGenerator, ExcelBaseType.DB_SCHEMA);
 		System.out.println("##job## isSuccess=" + isSuccess);
 	}
 

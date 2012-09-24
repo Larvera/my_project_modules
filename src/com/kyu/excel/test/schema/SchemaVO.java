@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kyu.excel.core.ExcelData;
+import com.kyu.excel.core.make.ExcelData;
 
 /**
  * @FileName : SchemaVO.java

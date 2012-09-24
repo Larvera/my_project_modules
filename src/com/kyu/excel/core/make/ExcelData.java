@@ -1,4 +1,4 @@
-package com.kyu.excel.core;
+package com.kyu.excel.core.make;
 
 import java.util.Map;
 
@@ -18,6 +18,6 @@ public interface ExcelData {
 	 * <pre>
 	 * @return
 	 */
-	public abstract Map<String, Object> createExcelParamMap();
+	public Map<String, Object> createExcelParamMap();
 
 }
