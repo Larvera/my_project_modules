@@ -57,15 +57,36 @@ public class ExcelParser {
 				HSSFRow hssfRow = hssfSheet.getRow(j);
 				ExcelValue excelValue = clazz.newInstance();
 
+				// row log
+				rowLog(hssfRow);
+
 				// cell 데이터 VO에 저장
 				excelValue = setCellValue(excelValue, excelValueList, hssfRow);
-				// add list
-				excelValueList.add(excelValue);
+
+				if (excelValue != null) {
+					excelValueList.add(excelValue); // add value
+				}
 			}
 		}
 
 		return excelValueList;
 
+	}
+
+	/**
+	 * <pre>
+	 * rowLog
+	 * 디버깅용 로그
+	 * <pre>
+	 * @param hssfRow
+	 */
+	private void rowLog(HSSFRow hssfRow) {
+		short firstCellNum = hssfRow.getFirstCellNum();
+		short lastCellNum = hssfRow.getLastCellNum();
+		int rowNum = hssfRow.getRowNum();
+		short height = hssfRow.getHeight();
+		boolean isZeroHeight = hssfRow.getZeroHeight();
+		System.out.println("##parse## firstCellNum=" + firstCellNum + ", lastCellNum=" + lastCellNum + ", rowNum=" + rowNum + ", height=" + height + ", isZeroHeight=" + isZeroHeight);
 	}
 
 	/**
@@ -89,7 +110,13 @@ public class ExcelParser {
 				if (cell != null) {
 					String value = getCellData(cell);
 					int columnIdx = cell.getColumnIndex();
-					vo.setValue(columnIdx, value); // set value
+					if (value == null) {
+						return null;
+					}
+
+					// set value
+					vo.setValue(columnIdx, value);
+					System.out.println("##setCellValue## columnIdx=" + columnIdx + ", value=" + value + ", cellType=" + cell.getCellType());
 				}
 			}
 
