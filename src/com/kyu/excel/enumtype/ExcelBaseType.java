@@ -23,6 +23,13 @@ public enum ExcelBaseType {
 		public String downloadFileName() {
 			return "DB.xls";
 		}
+	}
+	// DB 스키마
+	, INCROSS_EXPENSE("incross_expense.xls") {
+		@Override
+		public String downloadFileName() {
+			return "개인 지출결의서 양식.xls";
+		}
 	};
 
 	private ExcelBaseType(String excelFileName) {

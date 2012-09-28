@@ -16,7 +16,7 @@ public class ParseVO implements ExcelValue {
 	/** 이용시간 */
 	private String time;
 	/** 사용 금액 */
-	private String amount;
+	private int amount;
 	/** 가맹점 명 */
 	private String memberStoreName;
 	/** 결제 상태 */
@@ -55,15 +55,14 @@ public class ParseVO implements ExcelValue {
 	/**
 	 * @return the amount
 	 */
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 
 	/**
-	 * @param amount
-	 *            the amount to set
+	 * @param amount the amount to set
 	 */
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
@@ -123,7 +122,7 @@ public class ParseVO implements ExcelValue {
 		}
 		// 사용 금액
 		else if (cellIdx == 5) {
-			amount = value;
+			amount = Integer.parseInt(value);
 		}
 		// 가맹점명
 		else if (cellIdx == 6) {
