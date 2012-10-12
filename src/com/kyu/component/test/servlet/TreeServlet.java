@@ -32,9 +32,7 @@ public class TreeServlet extends HttpServlet {
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void service(ServletRequest req, ServletResponse res) throws ServletException,
-			IOException {
-
+	public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
 		// inven
 		List<InventoryVO> invenList = makeInvenList();
 

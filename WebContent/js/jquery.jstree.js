@@ -3881,6 +3881,18 @@
 
 					// Bound functions - you can bind any other function here (using boolean or function)
 					//"select_node"	: true
+				},
+				"check_node" : function () { // checkbox disalbled 추가
+					if(node_should_be_disabled) {
+						return false;
+					}
+					return true;
+				},
+				"uncheck_node" : function () {
+					if(node_should_be_disabled) {
+						return false;
+					}
+					return true;
 				}
 			}
 		},

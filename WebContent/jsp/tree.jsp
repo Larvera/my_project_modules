@@ -15,32 +15,51 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 	$(document).ready(function() {
 
-// 		$(".jstree-checked").each(function() {
-// 			var rawCheckedId = $(this).attr("id");
-// 			alert(rawCheckedId);
-// 		});
+		// node expand all
+		$("#open_node").click(function() {
+			$("#inven_tree").jstree("open_node");
+		});
 
-// 		$(".jstree-checked").each(function() {
-// 			$(this).click(function() {
-// 				var invenName = $(this).find("a").text();
-// 				alert(invenName);
-// 				$("#result").append(invenName + "<br/>");
-// 			});
-// 		});
+		// checkbox disabled
+		$("#disable").click(function() {
+			$("li").each(function() {
+				$(this).find("ins[class=jstree-checkbox]").hide();
+			});
+		});
 
-// 		$(".jstree-undetermined").each(function() {
-// 			$(this).click(function() {
-// 				var invenName = $(this).find("a").text();
-// 				alert(invenName);
-// 			});
-// 		});
+		// checkbox enable
+		$("#enable").click(function() {
+			$(".jstree-checkbox").each(function() {
+				$(this).show();
+			});
+		});
+
+		// invenName area checkbox disabled
+		$("#icon").click(function() {
+			$("a[id=invenNameArea]").each(function() {
+				$(this).find(".jstree-icon").hide();
+			});
+		});
+
+		// param transper data setting
+		$("#mapping_value").click(function() {
+			var checked_ids = [];
+			$("#inven_tree").jstree("get_checked", null, true).each(function() {
+				$(this).children("a[id=invenNameArea]").each(function() {
+					var id = $(this).parent().attr("id");
+					checked_ids.push(id);
+				});
+			});
+
+			//$("#jsfields").value(checked_ids.join(","));
+			$("#selectedInven").text(checked_ids.join(","));
+		});
 
 	});
 
 	// tree load
 	$(function () {
-		$("#inven_tree")
-		.jstree({
+		$("#inven_tree").jstree({
 			"plugins" : [ "themes", "html_data", "checkbox", "sort", "ui" ]
 		})
 		.bind("check_node.jstree", function(event, data) {
@@ -49,21 +68,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		.bind("uncheck_node.jstree", function(event, data) {
 			removeResult(data);
 		})
-		.bind("check_all.jstree", function(event, data) {
-			alert("check_all");
-		})
-		.bind("uncheck_all.jstree", function(event, data) {
-			alert("uncheck_all");
-		})
-		.bind("is_checked.jstree", function(event, data) {
-			alert("is_checked");
-		})
-		.bind("show_checkboxes.jstree", function(event, data) {
-			alert("show_checkboxes");
-		})
-		.bind("hide_checkboxes.jstree", function(event, data) {
-			alert("hide_checkboxes");
+		.bind("load_node.jstree", function (event, data) {
+			// tree expand all
+			$("#open_node").trigger("click");
+      	})
+		.bind("open_node.jstree close_node.jstree", function(event, data) {
 		});
+
 	});
 
 	// 체크된 inventory view
@@ -79,24 +90,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	// 체크 해제된 inventory remove
 	function removeResult(data) {
 		$(data.rslt.obj).find("a[id=invenNameArea]").each(function() {
-			console.log($(this).parent());
 			var invenId = $(this).parent().attr("id");
 			$("#result").find("p[id=" + invenId + "]").remove();
 		});
-	}
-
-	// 전송 파라미터 데이터 set
-	function setHiddenValue() {
-	    var checked_ids = [];
-		$("#inven_tree").jstree("get_checked", null, true).each(function() {
-			$(this).children("a[id=invenNameArea]").each(function() {
-				var id = $(this).parent().attr("id");
-				checked_ids.push(id);
-			});
-		});
-
-		//$("#jsfields").value(checked_ids.join(","));
-		$("#selectedInven").text(checked_ids.join(","));
 	}
 
 </script>
@@ -113,7 +109,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 			<li>
 				<a href="#">전체</a>
 				<ul>
-					<li>
+					<li id="toggle">
 						<a href="#">매체그룹</a>
 						<ul>
 							<c:forEach items="${groupList}" var="group">
@@ -142,19 +138,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		</ul>
 	</div>
 
-	<br/>
-	<br/>
-	<div id="btn">
-		<a href="javascript:setHiddenValue();">mapping value</a>
-	</div>
+	<br/><br/>
 
-	<br/>
-	<br/>
-	<div id="result"></div>
+	<input type="button" class="button" value="mappingValue" id="mapping_value" style="clear:both;" onclick="setHiddenValue();" />
+	<input type="button" class="button" value="open_node" id="open_node" style="clear:both;" />
+	<input type="button" class="button" value="disable" id="disable" style="clear:both;" />
+	<input type="button" class="button" value="enable" id="enable" style="clear:both;" />
+	<input type="button" class="button" value="icon" id="icon" style="clear:both;" />
 
+	<br/><br/>
+	click inventory : <span id="result"></span>
 	<br/>
+	mapping value : <span id="selectedInven"></span>
 	<br/>
-	<div id="selectedInven"></div>
+
+	<input type="text" id="userId" value="1"></input>
 
 </body>
 </html>
