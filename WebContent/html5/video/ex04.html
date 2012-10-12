@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>ex04</title>
+<meta name="description" content="" />
+<meta name="author" content="THINKER" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+
+		$("#capture").bind("click", captureVideo);
+
+	});
+
+	function captureVideo() {
+
+		var videoObj = document.getElementById("videoObj");
+
+		var w = videoObj.videoWidth * 0.2;
+		var h = videoObj.videoHeight * 0.2;
+
+		var canvas = document.createElement("canvas");
+		canvas.width = w;
+		canvas.height = h;
+
+		$(canvas).bind("mouseover", function() {
+			$(this).css("{width:300px;}");
+		});
+
+		var ctx = canvas.getContext("2d");
+
+		ctx.drawImage(videoObj, 0, 0, w, h);
+
+		$("#result").append(canvas);
+
+	}
+</script>
+
+</head>
+<body>
+
+	<div class="side" id="one">
+		<video id="videoObj" controls="controls">
+			<source src="onyourmark2.webm" type="video/webm"></source>
+			<source src="onyourmark2.mp4" type="video/mp4"></source>
+		</video>
+		<span id="capture">CAPTURE</span>
+		<div id="result"></div>
+	</div>
+</body>
+</html>

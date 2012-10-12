@@ -3,13 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ include file="/jsp/include.jsp" %>
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 <!--
 
 	$(document).ready(function() {
 
 		// json vo data
-		$.getJSON("${pageContext.request.contextPath}/json?cmd=list", function(json) {
+		$.getJSON("${pageContext.request.contextPath}/json.do?cmd=list", function(json) {
 			$.each(json.list, function(entryIndex, entry) {
 				var html = "<div>" + entry['imp'] + "</div>";
 				html += "<div>" + entry['click'] + "</div>";
@@ -26,7 +27,7 @@
 
 		$.ajax({
 			type : "GET",
-			url : "${pageContext.request.contextPath}/json",
+			url : "${pageContext.request.contextPath}/json.do",
 			dataType : "json",
 			data : "adsId=" + adsId + "&cmd=" + cmd,
 			success : function(json) {

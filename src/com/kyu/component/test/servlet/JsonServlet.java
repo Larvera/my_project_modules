@@ -22,7 +22,7 @@ import com.kyu.component.test.servlet.vo.ServletDataVO;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/json")
+@WebServlet("/json.do")
 public class JsonServlet extends HttpServlet {
 
 	/**  */

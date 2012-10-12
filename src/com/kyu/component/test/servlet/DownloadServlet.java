@@ -14,7 +14,7 @@ import com.kyu.component.test.download.DownloadHelper;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/download")
+@WebServlet("/download.do")
 public class DownloadServlet extends HttpServlet {
 
 	/**  */

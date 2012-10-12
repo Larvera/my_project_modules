@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
  * @작성자 : 이남규
  * @프로그램설명 : annotation test servlet 3.0
  */
-@WebServlet(asyncSupported=false, name="HelloServlet", urlPatterns = {"/hello", "/test"})
+@WebServlet(asyncSupported=false, name="HelloServlet", urlPatterns = {"/hello.do", "/test.do"})
 public class AnnoTestServlet extends GenericServlet {
 
 	/**  */
@@ -28,5 +28,4 @@ public class AnnoTestServlet extends GenericServlet {
 	public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
 		res.getWriter().println("test!!");
 	}
-
 }

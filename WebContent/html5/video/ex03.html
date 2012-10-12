@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>3D Rendering</title>
+    <style type="text/css">
+    div#room {
+      position: absolute;
+      top: 150px;
+      left: 400px;
+      perspective: 800;
+      -webkit-perspective: 800;
+      perspective-origin: 50% 225px; 
+      -webkit-perspective-origin: 50% 225px;
+    }
+    @-webkit-keyframes '3dturn' {
+      0% {
+        -webkit-transform: rotateX(0deg) rotateY(0deg) ;
+      }
+      20% {
+        -webkit-transform: rotateX(0deg) rotateY(90deg) ;
+ 
+      }
+      40% {
+        -webkit-transform: rotateX(90deg) rotateY(180deg);
+ 
+      }
+      60% {
+        -webkit-transform: rotateX(0deg) rotateY(180deg) ;
+      }
+      80% {
+        -webkit-transform: rotateX(0deg) rotateY(270deg) ;
+      }
+      100% {
+        -webkit-transform: rotateX(-90deg) rotateY(360deg);
+      }
+    }
+    div#cube {
+      margin: 0 auto;
+      height: 300px;
+      width: 300px;
+      transform-style:    preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      -webkit-transform: rotateX(0deg) rotateY(0deg);
+      -webkit-animation-name: '3dturn';
+      -webkit-animation-duration: 6s;
+      -webkit-animation-iteration-count: 4;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-play-state: running;
+    }
+    div#cube:hover {
+      -webkit-animation-play-state: paused;
+    }
+    div.side {
+      position: absolute;
+      height: 280px;
+      width:  280px;
+      padding: 10px;
+      border: 1px solid black;
+      background-color: rgba(50, 50, 50, 0.6);
+      backface-visibility: hidden;
+    }
+    div#one  {
+      transform: rotateX(90deg) translateZ(150px);
+      -webkit-transform: rotateX(90deg) translateZ(150px);
+    }
+    div#two  {
+      transform: translateZ(150px);
+      -webkit-transform: translateZ(150px);
+    }
+    div#three  {
+      transform: rotateY(90deg) translateZ(150px);
+      -webkit-transform: rotateY(90deg) translateZ(150px);
+    }
+    div#four  {
+      transform: rotateY(180deg) translateZ(150px);
+      -webkit-transform: rotateY(180deg) translateZ(150px);
+    }
+    div#five  {
+      transform: rotateY(-90deg) translateZ(150px);
+      -webkit-transform: rotateY(-90deg) translateZ(150px);
+    }
+    div#six {
+      transform: rotateX(-90deg) rotate(180deg) translateZ(150px) ;
+      -webkit-transform: rotateX(-90deg) rotate(180deg) translateZ(150px) ;
+    }
+    video {
+      position: absolute;
+      top:      50px;
+      width:   280px;
+      opacity: 0.7;
+    }
+    </style>
+  </head>
+  <body>
+	  <div id="room">
+		<div id="cube"> 
+			<div class="side" id="one"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="two"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="three"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="four"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="five"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="six"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>			
+		</div>
+	  </div>	
+  </body>
+</html>
+

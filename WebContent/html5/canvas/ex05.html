@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>ex01</title>
+		<meta name="description" content="" />
+		<meta name="generator" content="Studio 3 http://aptana.com/" />
+		<meta name="author" content="THINKER" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script type="text/javascript" src="inherit.js"></script>
+		<script type="text/javascript" src="ball.js"></script>
+		<script type="text/javascript" src="imgBall.js"></script>
+		<script>
+
+
+		   var ctx;
+		   var intVal;
+
+			$(document).ready ( function(){
+
+				ctx = $('#canvas')[0].getContext("2d");
+
+
+
+				$("#startMove").bind("click", function(e){
+
+
+					var balls = new Array( new ImageBall(60,60,ctx,"terminator_robot.gif"),
+					            new ImageBall(10,30,ctx,"terminator_robot.gif"),
+					            new ImageBall(30,40,ctx,"terminator_robot.gif"));
+
+					$(balls).each(function(i) {
+						  this.draw();
+					});
+
+
+				});
+
+
+			});
+		</script>
+	</head>
+	<body>
+		<button id="startMove">START</button><br/>
+		<button id="stopMove">STOP</button><br/>
+		<button id="saveImage">SAVE</button><br/>
+
+		<canvas id="canvas" width="300" height="300"></canvas>
+		<div id="result"></div>
+	</body>
+</html>

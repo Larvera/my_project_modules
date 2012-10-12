@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/customTag")
+@WebServlet("/customTag.do")
 public class CustomTagServlet extends HttpServlet {
 
 	/**  */

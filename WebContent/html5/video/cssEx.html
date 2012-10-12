@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>cssEx</title>
+		<meta name="description" content="" />
+		<meta name="author" content="THINKER" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<script type="text/javascript" src="js/jquery-1.6.1.min.js"></script>
+		<style>
+
+    @-webkit-keyframes '3dturn' {
+      0% {
+        -webkit-transform: rotateX(0deg) rotateY(0deg);
+      }
+      20% {
+        -webkit-transform: rotateX(0deg) rotateY(90deg) rotateZ(30deg);
+      }
+      40% {
+        -webkit-transform: rotateX(00deg) rotateY(180deg);
+      }
+      60% {
+        -webkit-transform: rotateX(0deg) rotateY(270deg);
+      }
+      80% {
+        -webkit-transform: rotateX(0deg) rotateY(0deg);
+      }
+      100% {
+        -webkit-transform: rotateX(00deg) rotateY(0deg);
+      }
+    }
+
+		.article{
+			background-color:#213E4A;
+			margin:3em 0;
+			padding:20px;
+
+      transform-style:    preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      -webkit-transform: rotateX(0deg) rotateY(0deg);
+      -webkit-animation-name: '3dturn';
+      -webkit-animation-duration: 6s;
+      -webkit-animation-iteration-count: 1;
+      -webkit-animation-direction: alternate;
+      -webkit-animation-play-state: running;
+
+
+		}
+
+		figure {
+
+			float:right;
+			height:300px;
+			overflow:hidden;
+			width:500px;
+
+			-webkit-transform-style: flat;
+			-webkit-perspective: 500;
+			-webkit-perspective-origin: 25% 25%;
+			-webkit-backface-visibility:visible;
+
+			-webkit-transform: scale(0.75)  ;
+			-moz-transform: rotate(-2deg);
+			-o-transform:rotate(-2deg);
+		}
+
+		.mid {
+
+			-webkit-animation-name: '3dturn';
+		}
+
+		figure:hover {
+			-webkit-transform: rotate(20deg);
+			cursor: pointer;
+			clip:auto;
+
+		}
+
+
+		</style>
+		<script>
+
+			$(document).ready( function ( ) {
+
+				$("article").bind("click" , function( )  {
+					$(this).addClass("article") ;
+					$(this).html($("#article2").html());
+				});
+
+			});
+
+
+		</script>
+	</head>
+	<body>
+		<div>
+			<header>
+				<h1>cssEx</h1>
+			</header>
+			<nav>
+				<p>
+					<a href="/">Home</a>
+				</p>
+				<p>
+					<a href="/contact">Contact</a>
+				</p>
+			</nav>
+            <section id="articles"> <!-- A new section with the articles -->
+
+				<!-- Article 1 start -->
+
+                <div class="line"></div>  <!-- Dividing line -->
+
+                <article id="article1"> <!-- The new article tag. The id is supplied so it can be scrolled into view. -->
+                    <h2>Photoshoot Effect</h2>
+
+                    <div class="line"></div>
+
+                    <div class="articleBody clear">
+
+                    	<figure> <!-- The figure tag marks data (usually an image) that is part of the article -->
+	                    	<a href="http://tutorialzine.com/2010/02/photo-shoot-css-jquery/"><img src="img/1.jpg" width="620" height="340" /></a>
+                        </figure>
+
+                        <p>In this tutorial, we are creating a photo shoot effect with our just-released PhotoShoot jQuery plug-in. With it you can convert a regular div on the page into a photo shooting stage simulating a camera-like feel.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer luctus quam quis nibh fringilla sit amet consectetur lectus malesuada. Sed nec libero erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi nisi, rhoncus ut vestibulum ac, sollicitudin quis lorem. Duis felis dui, vulputate nec adipiscing nec, interdum vel tortor. Sed gravida, erat nec rutrum tincidunt, metus mauris imperdiet nunc, et elementum tortor nunc at eros. Donec malesuada congue molestie. Suspendisse potenti. Vestibulum cursus congue sem et feugiat. Morbi quis elit odio. </p>
+                    </div>
+                </article>
+
+				<!-- Article 1 end -->
+
+
+				<!-- Article 2 start -->
+
+                <div class="line"></div>
+
+                <article id="article2">
+                    <h2>Sweet AJAX Tabs</h2>
+
+                    <div class="line"></div>
+
+                    <div class="articleBody clear">
+                    	<figure>
+	                    	<a href="http://tutorialzine.com/2010/01/sweet-tabs-jquery-ajax-css/"><img src="img/2.jpg" width="620" height="340" /></a>
+                        </figure>
+
+                        <p>Here we are making sweet AJAX-powered tabs with CSS3 and the newly released version 1.4 of jQuery.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer luctus quam quis nibh fringilla sit amet consectetur lectus malesuada. Sed nec libero erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi nisi, rhoncus ut vestibulum ac, sollicitudin quis lorem. Duis felis dui, vulputate nec adipiscing nec, interdum vel tortor. Sed gravida, erat nec rutrum tincidunt, metus mauris imperdiet nunc, et elementum tortor nunc at eros. Donec malesuada congue molestie. Suspendisse potenti. Vestibulum cursus congue sem et feugiat. Morbi quis elit odio. </p>
+                    </div>
+                </article>
+
+				<!-- Article 2 end -->
+
+				<!-- Article 3 start -->
+
+                <div class="line"></div>
+
+                <article id="article3">
+                    <h2>Halftone Navigation Menu</h2>
+
+                    <div class="line"></div>
+
+                    <div class="articleBody clear">
+                    	<figure>
+	                    	<a href="http://tutorialzine.com/2010/01/halftone-navigation-menu-jquery-css/"><img src="img/3.jpg" width="620" height="340" /></a>
+                        </figure>
+
+                        <p>Today we are making a CSS3 & jQuery halftone-style navigation menu, which will allow you to display animated halftone-style shapes in accordance with the navigation links, and will provide a simple editor for creating additional shapes as well.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer luctus quam quis nibh fringilla sit amet consectetur lectus malesuada. Sed nec libero erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi nisi, rhoncus ut vestibulum ac, sollicitudin quis lorem. Duis felis dui, vulputate nec adipiscing nec, interdum vel tortor. Sed gravida, erat nec rutrum tincidunt, metus mauris imperdiet nunc, et elementum tortor nunc at eros. Donec malesuada congue molestie. Suspendisse potenti. Vestibulum cursus congue sem et feugiat. Morbi quis elit odio. </p>
+                    </div>
+                </article>
+
+				<!-- Article 3 end -->
+
+
+            </section>
+
+			<footer>
+				<p>
+					&copy; Copyright  by THINKER
+				</p>
+			</footer>
+		</div>
+	</body>
+</html>

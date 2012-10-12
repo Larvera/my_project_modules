@@ -18,7 +18,7 @@ import javax.servlet.http.Part;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/upload")
+@WebServlet("/upload.do")
 @MultipartConfig(location="E:\\test\\upload")
 public class UploadServlet extends HttpServlet {
 

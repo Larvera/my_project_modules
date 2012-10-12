@@ -23,7 +23,7 @@ import com.kyu.excel.test.ReportVO;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/excelDownload")
+@WebServlet("/excelDownload.do")
 public class ExcelDownload extends HttpServlet {
 
 	/**  */

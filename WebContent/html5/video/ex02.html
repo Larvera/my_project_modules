@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>ex02</title>
+		<meta name="description" content="" />
+		<meta name="author" content="THINKER" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		
+		<style type="text/css"> 
+ 
+		video {
+			position: absolute; top: 25%; width: 280px; opacity: 0.7;
+		}
+		
+		div.side {
+			position: absolute;
+			height: 280px; width: 280px;
+			padding: 10px;
+			border: 1px solid black; background-color: rgba(50, 50, 50, 0.6);
+		} 
+		
+		div#room {
+			-webkit-perspective: 600;
+			-webkit-perspective-origin: 20% 70%; }
+		div#cube {
+			margin: 0 auto;
+			height: 300px; width: 300px; -webkit-transform-style: preserve-3d;
+		}
+		
+		div#one {
+			-webkit-transform: rotateX(90deg) translateZ(150px); }
+		div#two {
+			-webkit-transform: translateZ(150px);
+		}
+		div#three {
+			-webkit-transform: rotateY(90deg) translateZ(150px); }
+		div#four {
+			-webkit-transform: rotateY(180deg) translateZ(150px);
+		}
+		div#five {
+			-webkit-transform: rotateY(-90deg) translateZ(150px); }
+		div#six {
+			-webkit-transform: rotateX(-90deg) rotate(180deg)
+		}
+		</style>
+
+	</head>
+	<body>
+	  <div id="room">
+		<div id="cube"> 
+			<div class="side" id="one"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="two"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="three"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="four"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="five"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>
+			<div class="side" id="six"> 
+				<video  controls="controls" >
+		  			<source src="onyourmark2.webm" type="video/webm"></source>
+		  			<source src="onyourmark2.mp4" type="video/mp4"></source>
+				</video>
+			</div>			
+		</div>
+	  </div>	
+	</body>
+</html>

@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebServlet;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-@WebServlet("/jstl")
+@WebServlet("/jstl.do")
 public class JSTLServlet extends GenericServlet {
 
 	/**  */
