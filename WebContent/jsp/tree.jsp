@@ -104,7 +104,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		<input type="hidden" name="jsfields" id="jsfields" value="" />
 	</form>
 
-	<div id="inven_tree" class="tree">
+	<div id="inven_tree">
 		<ul>
 			<li>
 				<a href="#">전체</a>
