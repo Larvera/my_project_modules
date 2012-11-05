@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import com.kyu.common.Conf;
+import com.kyu.common.DateUtil;
 import com.kyu.excel.ExcelHandler;
 import com.kyu.excel.core.parse.ExcelValue;
 import com.kyu.excel.enumtype.ExcelBaseType;
@@ -17,38 +18,31 @@ import com.kyu.excel.generator.JXLSExcelGenerator;
  * @Date : 2012. 9. 24.
  * @작성자 : 이남규
  * @프로그램설명 :
+ * 	1. card 사 홈페이지에서 승인 내역 excel로 출력
+	2. excel 왼쪽에 새로운 행 생성
+ 		- title : 결제 구분
+ 		- 중식, 석식, 심야, 업무, 휴대폰, 의욕, 조식
+	3. c:\\ 디렉토리에 card.xml이름으로 excel 옮기기
  */
-@Deprecated
-public class IncrossExpense {
+public class IncrossCardBill {
 
 	/** 하나SK카드 승인 금액 */
 	private final String FILE_PATH = "C:/card.xls";
-	/** 승인 상태 (정상) */
-	private final String STATUS_NORMALITY = "정상";
-
-	/** 핸드폰 자동 이체 구분 text */
-	private final String[] PHONE_SEPARATOR_ARR = { "자동납부" };
-	/** 택시 청구 요금 구분 text */
-	private final String[] TAXI_SEPARATOR_ARR = { "주식회사한국스마트카드", "택시" };
 
 	/** 핸드폰 지원 금액 */
 	private final int PHONE_MAX_AMOUNT = 50000;
 
-	/** 점심 시작 시간 */
-	private final int LUNCH_START_TIME = 1100;
-	/** 점심 종료 시간 */
-	private final int LUNCH_END_TIME = 1700;
-	/** 저녁 시작 시간 */
-	private final int DINNER_START_TIME = 1700;
+	/** 승인 상태 (정상) */
+	private final String STATUS_NORMALITY = "정상";
 
-	/** 심야 택시 시작 시간 */
-	private final int NIGHT_TAXI_START_TIME = 0000;
-	/** 심야 택시 종료 시간 */
-	private final int NIGHT_TAXI_END_TIME = 0600;
-	/** 업무 택시 시작 시간 */
-	private final int BUSINESS_TAXI_START_TIME = 0600;
-	/** 업무 택시 종료 시간 */
-	private final int BUSINESS_TAXI_END_TIME = 2400;
+	private final String LUNCH = "중식";
+	private final String DINNER = "석식";
+	private final String NIGHT_TAXI = "심야";
+	private final String BUSINESS_TAXI = "업무";
+	private final String CELL_PHONE = "휴대폰";
+	private final String BREAKFAST = "조식";
+	private final String MEETING_COST = "의욕";
+
 
 	/**
 	 * <pre>
@@ -61,7 +55,7 @@ public class IncrossExpense {
 	public static void main(String[] args) throws Exception {
 		Conf.init();
 
-		IncrossExpense main = new IncrossExpense();
+		IncrossCardBill main = new IncrossCardBill();
 		main.job();
 	}
 
@@ -114,43 +108,65 @@ public class IncrossExpense {
 	 * @param vo
 	 */
 	private void setData(ExcelMappingVO excelMappingVO, ParseVO vo) {
-		String memberStoreName = vo.getMemberStoreName();
+		String paymentKind = vo.getPaymentKind();
 		String status = vo.getStatus();
 		int amount = vo.getAmount();
-		int time = getTime(vo.getTime());
 
 		// 취소 상태인 경우
 		if (STATUS_NORMALITY.equals(status) == false) {
 			return;
 		}
-		// 핸드폰
-		else if (includeSeparatorTxt(memberStoreName, PHONE_SEPARATOR_ARR)) {
-			setPhoneAmount(excelMappingVO, amount);
-		}
-		// 심야 택시
-		else if (isTaxiCheck(memberStoreName, time, true)) {
-			excelMappingVO.setTaxiNightList(vo);
-		}
-		// 업무 택시
-		else if (isTaxiCheck(memberStoreName, time, false)) {
-			excelMappingVO.setTaxiBusinessList(vo);
-		}
 		// 점심
-		else if (time > LUNCH_START_TIME && time < LUNCH_END_TIME) {
+		else if (LUNCH.equals(paymentKind)) {
 			excelMappingVO.setTotalLunchAmount(amount);
 			excelMappingVO.setLunchList(vo);
 		}
 		// 저녁
-		else if (time >= DINNER_START_TIME) {
+		else if (DINNER.equals(paymentKind)) {
 			excelMappingVO.setDinnerList(vo);
 			excelMappingVO.setTotalDinnerAmount(amount);
 		}
-		else {
+		// 핸드폰
+		else if (CELL_PHONE.equals(paymentKind)) {
+			setPhoneAmount(excelMappingVO, amount);
+		}
+		// 심야 택시
+		else if (NIGHT_TAXI.equals(paymentKind)) {
+			String yesterday = getYesterday(vo.getDate()); // 심야 택시는 실제 업무한 날짜를 지정한다.
+			vo.setDate(yesterday);
+			excelMappingVO.setTaxiNightList(vo);
+		}
+		// 업무 택시
+		else if (BUSINESS_TAXI.equals(paymentKind)) {
+			excelMappingVO.setTaxiBusinessList(vo);
+		}
+		// 조식
+		else if (BREAKFAST.equals(paymentKind)) {
 			excelMappingVO.setOtherList(vo);
+		}
+		// 의욕관리비
+		else if (MEETING_COST.equals(paymentKind)) {
+			excelMappingVO.setMeetingCostList(vo);
+		}
+		else {
 			System.out.println("##job## (is not same) vo=" + vo);
+			throw new RuntimeException("결제 구분을 확인해 주시기 바랍니다.");
 		}
 
 		excelMappingVO.setTotalAmount(amount);
+	}
+
+	/**
+	 * <pre>
+	 * setYesterday
+	 *
+	 * <pre>
+	 * @param vo
+	 */
+	private String getYesterday(String date) {
+		String replaceDate = date.replaceAll("-", "");
+		String yesterday = DateUtil.getDayInterval(replaceDate, "yyyy-MM-dd", -1);
+		return yesterday;
 	}
 
 	/**
@@ -192,67 +208,5 @@ public class IncrossExpense {
 		excelMappingVO.setPhoneCalculationAmount(phoneCalculationAmount);
 		excelMappingVO.setPhoneAmount(amount);
 		excelMappingVO.setPhoneExceptAmount(phoneExceptAmount);
-	}
-
-	/**
-	 * <pre>
-	 * includeSeparatorTxt
-	 *
-	 * <pre>
-	 * @param memberStoreName
-	 * @return
-	 */
-	private boolean includeSeparatorTxt(String memberStoreName, String[] separators) {
-		boolean existSeparator = false;
-		for (int i = 0; i < separators.length; i++) {
-			String separator = separators[i];
-			if (memberStoreName.indexOf(separator) > -1) {
-				existSeparator = true;
-			}
-		}
-		return existSeparator;
-	}
-
-	/**
-	 * <pre>
-	 * isNightTaxi
-	 *
-	 * <pre>
-	 * @param memberStoreName
-	 * @param separtor
-	 * @param time
-	 * @return
-	 */
-	private boolean isTaxiCheck(String memberStoreName, int time, boolean isNight) {
-		boolean existSepTxt = includeSeparatorTxt(memberStoreName, TAXI_SEPARATOR_ARR);
-		boolean isTime = false;
-
-		// 야간 택시
-		if (isNight && time >= NIGHT_TAXI_START_TIME && time <= NIGHT_TAXI_END_TIME) {
-			isTime = true;
-		}
-		// 업무 택시
-		else if (isNight == false && time > BUSINESS_TAXI_START_TIME && time < BUSINESS_TAXI_END_TIME) {
-			isTime = true;
-		}
-
-		if (existSepTxt && isTime) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * <pre>
-	 * getTime
-	 *
-	 * <pre>
-	 * @param date
-	 * @return
-	 */
-	private int getTime(String time) {
-		String timeStr = time.replaceAll(":", "");
-		return Integer.parseInt(timeStr);
 	}
 }

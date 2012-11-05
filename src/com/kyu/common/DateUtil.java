@@ -2,9 +2,13 @@ package com.kyu.common;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -334,7 +338,34 @@ public class DateUtil {
 		return result;
 	}
 
+	public static Calendar getCalendar(String dateString) {
+		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+09:00"), Locale.KOREA);
+		calendar.setTime(string2Date(dateString, "yyyyMMdd"));
+
+		return calendar;
+	}
+
+	public static Date string2Date(String s, String format) {
+		java.util.Date d = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			d = sdf.parse(s, new ParsePosition(0));
+		} catch (Exception e) {
+			throw new RuntimeException("Date format not valid.");
+		}
+		return d;
+	}
+
+	public static String getDayInterval(String dateString, String format, int distance) {
+		Calendar cal = getCalendar(dateString);
+		cal.roll(Calendar.DATE, distance);
+		Date d = cal.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(d);
+	}
+
 	public static void main(String[] args) {
-		System.out.println(getHangulYyyyMM());
+		String date = getDayInterval("2012-02-02", "yyyy-MM-dd", -1);
+		System.out.println(date);
 	}
 }

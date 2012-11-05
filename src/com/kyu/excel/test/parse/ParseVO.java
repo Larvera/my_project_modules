@@ -1,5 +1,7 @@
 package com.kyu.excel.test.parse;
 
+import lombok.Data;
+
 import com.kyu.excel.core.parse.ExcelValue;
 
 /**
@@ -9,8 +11,11 @@ import com.kyu.excel.core.parse.ExcelValue;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
+@Data
 public class ParseVO implements ExcelValue {
 
+	/** 결제 종류 */
+	private String paymentKind;
 	/** 이용일 */
 	private String date;
 	/** 이용시간 */
@@ -23,113 +28,38 @@ public class ParseVO implements ExcelValue {
 	private String status;
 
 	/**
-	 * @return the date
-	 */
-	public String getDate() {
-		return date;
-	}
-
-	/**
-	 * @param date
-	 *            the date to set
-	 */
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	/**
-	 * @return the time
-	 */
-	public String getTime() {
-		return time;
-	}
-
-	/**
-	 * @param time
-	 *            the time to set
-	 */
-	public void setTime(String time) {
-		this.time = time;
-	}
-
-	/**
-	 * @return the amount
-	 */
-	public int getAmount() {
-		return amount;
-	}
-
-	/**
-	 * @param amount the amount to set
-	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-
-	/**
-	 * @return the memberStoreName
-	 */
-	public String getMemberStoreName() {
-		return memberStoreName;
-	}
-
-	/**
-	 * @param memberStoreName
-	 *            the memberStoreName to set
-	 */
-	public void setMemberStoreName(String memberStoreName) {
-		this.memberStoreName = memberStoreName;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status
-	 *            the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "ParseVO [date=" + date + ", time=" + time + ", amount=" + amount + ", memberStoreName="
-				+ memberStoreName + ", status=" + status + "]";
-	}
-
-	/*
-	 * (non-Javadoc)
+	 * <pre>
+	 * setValue
 	 *
-	 * @see com.kyu.excel.core.parse.ExcelValue#setValue(int, java.lang.String)
+	 * <pre>
+	 * @param cellIdx
+	 * @param value
 	 */
 	@Override
 	public void setValue(int cellIdx, String value) {
+
+		// 결제 구분
+		if (cellIdx == 0) {
+			paymentKind = value;
+		}
 		// 이용일
-		if (cellIdx == 1) {
+		else if (cellIdx == 2) {
 			date = value;
 		}
 		// 이용시간
-		else if (cellIdx == 2) {
+		else if (cellIdx == 3) {
 			time = value;
 		}
 		// 사용 금액
-		else if (cellIdx == 5) {
+		else if (cellIdx == 6) {
 			amount = Integer.parseInt(value);
 		}
 		// 가맹점명
-		else if (cellIdx == 6) {
+		else if (cellIdx == 7) {
 			memberStoreName = value;
 		}
 		// 승인 상태
-		else if (cellIdx == 13) {
+		else if (cellIdx == 14) {
 			status = value;
 		}
 	}

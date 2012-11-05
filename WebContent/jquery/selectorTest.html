@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		test1();
+		test2();
+		test3();
+
+
+	});
+
+	function test1() {
+
+		console.log("################################################");
+		console.log("## test1 START");
+		console.log("################################################");
+
+		$("#test1 > li").each(function() {
+			var test = $(this).children();
+			console.log(test);
+		});
+
+		console.log("----------------------------------------------");
+
+		$("#test1").children("li").each(function() {
+			var test = $(this).children();
+			console.log(test);
+		});
+
+		console.log("----------------------------------------------");
+
+		$("#test1").children().each(function() {
+			var test = $(this).children();
+			console.log(test);
+		});
+
+	}
+
+	function test2() {
+
+		console.log("################################################");
+		console.log("## test2 START");
+		console.log("################################################");
+
+		$("#test2 > li > ul").each(function() {
+			var inputs = $(this).children();
+			$(inputs).each(function() {
+				var test = $(this).val();
+				console.log(test);
+			})
+		});
+
+		console.log("----------------------------------------------");
+
+		$("input").each(function() {
+			var test = $(this).val();
+			console.log(test);
+		})
+
+		console.log("----------------------------------------------");
+
+		$("input[name=name]").each(function() {
+			var test = $(this).val();
+			console.log(test);
+		});
+
+		console.log("----------------------------------------------");
+
+		var nameCnt = $("input[id=name]").size();
+		console.log("nameCnt=" + nameCnt);
+		$("input[id=name]").each(function() {
+			var test = $(this).val();
+			console.log(test);
+		});
+	}
+
+	function test3() {
+
+		console.log("################################################");
+		console.log("## test3 START");
+		console.log("################################################");
+
+		var lenght = $("#dupl").size();
+		console.log(lenght); // 1 (#은 딱 한 개의 요소만 return 한다. 만약 id로 selector를 하고 싶을 때에는 아래와 같은 방식으로 요소를 추출하자.)
+
+		console.log("----------------------------------------------");
+
+		$("div[id=dupl]").each(function() {
+			var test = $(this).text();
+			console.log(test);
+		});
+	}
+
+
+</script>
+</head>
+<body>
+
+	<div id="test1">
+		<li><ul>1번째</ul><ul>1_1번째</ul></li>
+		<li><ul>2번째</ul></li>
+		<li><ul>3번째</ul></li>
+		<li><ul>4번째</ul></li>
+		<span><p>test</p></span>
+	</div>
+
+	<div id="test2">
+		<li>
+			<ul>
+				<input type="text" id="name" name="name" value="namkyu1" />
+				<input type="text" id="name" name="name" value="namkyu2" />
+				<input type="text" id="name" name="name" value="namkyu3" />
+			</ul>
+		</li>
+	</div>
+
+	<div id="dupl">dupl_1</div>
+	<div id="dupl">dupl_2</div>
+	<div id="dupl">dupl_3</div>
+</body>
+</html>

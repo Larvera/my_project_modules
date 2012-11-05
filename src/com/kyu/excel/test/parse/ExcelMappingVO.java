@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Data;
+
 import com.kyu.common.DateUtil;
 import com.kyu.excel.core.make.ExcelData;
 
@@ -15,6 +17,7 @@ import com.kyu.excel.core.make.ExcelData;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
+@Data
 public class ExcelMappingVO implements ExcelData {
 
 	/** 통신비 청구 금액 */
@@ -38,13 +41,15 @@ public class ExcelMappingVO implements ExcelData {
 	/** 점심 사용 내역 */
 	private final List<ParseVO> lunchList = new ArrayList<ParseVO>();
 	/** 기타 사용 내역 */
+	private final List<ParseVO> meetingCostList = new ArrayList<ParseVO>();
+	/** 기타 사용 내역 */
 	private final List<ParseVO> otherList = new ArrayList<ParseVO>();
 
 	/**
-	 * @return the lunchList
+	 * @param meetingCostList the meetingCostList to set
 	 */
-	public List<ParseVO> getLunchList() {
-		return lunchList;
+	public void setMeetingCostList(ParseVO vo) {
+		meetingCostList.add(vo);
 	}
 
 	/**
@@ -52,13 +57,6 @@ public class ExcelMappingVO implements ExcelData {
 	 */
 	public void setLunchList(ParseVO vo) {
 		lunchList.add(vo);
-	}
-
-	/**
-	 * @return the oherList
-	 */
-	public List<ParseVO> getOtherList() {
-		return otherList;
 	}
 
 	/**
@@ -83,52 +81,10 @@ public class ExcelMappingVO implements ExcelData {
 	}
 
 	/**
-	 * @return the taxiBusinessList
-	 */
-	public List<ParseVO> getTaxiBusinessList() {
-		return taxiBusinessList;
-	}
-
-	/**
-	 * @return the taxiNightList
-	 */
-	public List<ParseVO> getTaxiNightList() {
-		return taxiNightList;
-	}
-
-	/**
-	 * @return the totalAmount
-	 */
-	public int getTotalAmount() {
-		return totalAmount;
-	}
-
-	/**
 	 * @param totalAmount the totalAmount to set
 	 */
 	public void setTotalAmount(int amount) {
 		totalAmount += amount;
-	}
-
-	/**
-	 * @return the phoneCalculationAmount
-	 */
-	public int getPhoneCalculationAmount() {
-		return phoneCalculationAmount;
-	}
-
-	/**
-	 * @param phoneCalculationAmount the phoneCalculationAmount to set
-	 */
-	public void setPhoneCalculationAmount(int phoneCalculationAmount) {
-		this.phoneCalculationAmount = phoneCalculationAmount;
-	}
-
-	/**
-	 * @return the totalDinnerAmount
-	 */
-	public int getTotalDinnerAmount() {
-		return totalDinnerAmount;
 	}
 
 	/**
@@ -139,45 +95,10 @@ public class ExcelMappingVO implements ExcelData {
 	}
 
 	/**
-	 * @return the phoneExceptAmount
-	 */
-	public int getPhoneExceptAmount() {
-		return phoneExceptAmount;
-	}
-
-	/**
-	 * @param phoneExceptAmount the phoneExceptAmount to set
-	 */
-	public void setPhoneExceptAmount(int phoneExceptAmount) {
-		this.phoneExceptAmount = phoneExceptAmount;
-	}
-
-	/**
-	 * @return the totalLunchAmount
-	 */
-	public int getTotalLunchAmount() {
-		return totalLunchAmount;
-	}
-
-	/**
 	 * @param totalLunchAmount the totalLunchAmount to set
 	 */
 	public void setTotalLunchAmount(int amount) {
 		totalLunchAmount += amount;
-	}
-
-	/**
-	 * @return the phoneAmount
-	 */
-	public int getPhoneAmount() {
-		return phoneAmount;
-	}
-
-	/**
-	 * @param phoneAmount the phoneAmount to set
-	 */
-	public void setPhoneAmount(int phoneAmount) {
-		this.phoneAmount = phoneAmount;
 	}
 
 	/**
@@ -186,15 +107,6 @@ public class ExcelMappingVO implements ExcelData {
 	public void setDinnerList(ParseVO vo) {
 		dinnerList.add(vo);
 	}
-
-	/**
-	 * @return the dinnerList
-	 */
-	public List<ParseVO> getDinnerList() {
-		return dinnerList;
-	}
-
-
 
 	/*
 	 * (non-Javadoc)
