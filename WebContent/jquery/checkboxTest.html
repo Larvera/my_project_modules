@@ -8,26 +8,34 @@
 
 	$(document).ready(function() {
 
-		// all check
+		// 체크 박스 모두 체크
 		$("#checkAll").click(function() {
 			$("input[name=box]:checkbox").each(function() {
 				$(this).attr("checked", true);
 			});
 		});
 
-		// all uncheck
+		// 체크 박스 모두 해제
 		$("#uncheckAll").click(function() {
 			$("input[name=box]:checkbox").each(function() {
 				$(this).attr("checked", false);
 			});
 		});
 
-		$("#getCheck").click(function() {
+		// 체크 되어 있는 값 추출
+		$("#getCheckedAll").click(function() {
 			$("input[name=box]:checked").each(function() {
 				var test = $(this).val();
 				console.log(test);
 			});
+		});
 
+		// 서버에서 받아온 데이터 체크하기 (콤마로 받아온 경우)
+		$("#updateChecked").click(function() {
+			var splitCode = $("#splitCode").val().split(",");
+			for (var idx in splitCode) {
+				$("input[name=box][value=" + splitCode[idx] + "]").attr("checked", true);
+			}
 		});
 
 		// test case
@@ -44,7 +52,7 @@
 		var cnt = $("input:checkbox").size();
 		console.log("checkboxSize=" + cnt);
 
-		$("input:checkbox").each(function() {
+		$("input[name=box]:checkbox").each(function() {
 			var checkboxValue = $(this).val();
 			console.log("checkboxValue=" + checkboxValue);
 		});
@@ -68,13 +76,17 @@
 		<li><input type="checkbox" name="box" value="C" /><label>3번째 checkbox</label></li>
 		<li><input type="checkbox" name="box" value="D" /><label>4번째 checkbox</label></li>
 	</div>
-	<br/>
-	<br/>
+
+	<br/><br/>
+
 	<div id="buttonGroups">
 		<input type="button" id="checkAll" value="check all" />
 		<input type="button" id="uncheckAll" value="uncheck all" />
-		<input type="button" id="getCheck" value="get checked all" />
+		<input type="button" id="getCheckedAll" value="get checked all" />
+		<input type="button" id="updateChecked" value="updateChecked" />
 	</div>
+
+	<input type="hidden" id="splitCode" name="splitCode" value="A,C,D" />
 
 </body>
 </html>
