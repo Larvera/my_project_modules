@@ -15,14 +15,18 @@ import com.kyu.excel.core.make.ExcelData;
  */
 public class POIExcelGenerator extends AbstractExcelCore {
 
-	/* (non-Javadoc)
-	 * @see com.kyu.excel.core.ExcelCore#createWorkBook(com.kyu.excel.core.ExcelData, java.lang.String)
+	/**
+	 * <pre>
+	 * createWorkBook
+	 *
+	 * <pre>
+	 * @param data
+	 * @param excelFileName
 	 */
 	@Override
-	public void createWorkBook(ExcelData data, String excelFileName) throws Exception {
+	public void createWorkBook(ExcelData data, String excelFileName) {
 		HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
 		HSSFSheet sheet = hssfWorkbook.createSheet(excelFileName);
-
 	}
 
 

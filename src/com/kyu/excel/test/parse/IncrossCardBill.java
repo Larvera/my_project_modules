@@ -18,11 +18,6 @@ import com.kyu.excel.generator.JXLSExcelGenerator;
  * @Date : 2012. 9. 24.
  * @작성자 : 이남규
  * @프로그램설명 :
- * 	1. card 사 홈페이지에서 승인 내역 excel로 출력
-	2. excel 왼쪽에 새로운 행 생성
- 		- title : 결제 구분
- 		- 중식, 석식, 심야, 업무, 휴대폰, 의욕, 조식
-	3. c:\\ 디렉토리에 card.xml이름으로 excel 옮기기
  */
 public class IncrossCardBill {
 
@@ -57,6 +52,14 @@ public class IncrossCardBill {
 
 		IncrossCardBill main = new IncrossCardBill();
 		main.job();
+
+//		1. card 사 홈페이지에서 승인 내역 excel로 출력
+//		2. 첫 번째 행 생성
+//			- title : 결제 구분
+//			- 중식, 석식, 심야, 업무, 휴대폰, 의욕, 조식
+//		3. 두 번째 행 생성
+//			- 석식 초과 분에 대한 값 입력 (양의 정수)
+//		4. c:\\ 디렉토리에 card.xml이름으로 excel 옮기기
 	}
 
 	/**
@@ -123,8 +126,7 @@ public class IncrossCardBill {
 		}
 		// 저녁
 		else if (DINNER.equals(paymentKind)) {
-			excelMappingVO.setDinnerList(vo);
-			excelMappingVO.setTotalDinnerAmount(amount);
+			setLunchData(excelMappingVO, vo);
 		}
 		// 핸드폰
 		else if (CELL_PHONE.equals(paymentKind)) {
@@ -152,8 +154,40 @@ public class IncrossCardBill {
 			System.out.println("##job## (is not same) vo=" + vo);
 			throw new RuntimeException("결제 구분을 확인해 주시기 바랍니다.");
 		}
+	}
 
-		excelMappingVO.setTotalAmount(amount);
+	/**
+	 * <pre>
+	 * setLunchData
+	 *
+	 * <pre>
+	 * @param excelMappingVO
+	 * @param vo
+	 * @param amount
+	 * @throws CloneNotSupportedException
+	 */
+	private void setLunchData(ExcelMappingVO excelMappingVO, ParseVO vo) {
+		try {
+			int amount = vo.getAmount();
+			int dinnerExceed = vo.getDinnerExceed();
+
+			if (dinnerExceed > 0) { // 석식 초과 분이 있다면
+				amount = amount - dinnerExceed; // 결제 금액 - 석식 초과 금액
+				vo.setAmount(amount);
+
+				// 의욕관리비 데이터 set
+				ParseVO cloneVO = (ParseVO) vo.clone();
+				cloneVO.setAmount(dinnerExceed);
+				excelMappingVO.setMeetingCostList(cloneVO);
+			}
+
+			// 석식 데이터 set
+			excelMappingVO.setDinnerList(vo);
+
+		} catch (CloneNotSupportedException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/**

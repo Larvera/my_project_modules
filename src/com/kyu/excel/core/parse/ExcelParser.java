@@ -32,45 +32,50 @@ public class ExcelParser {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ExcelValue> parse(InputStream excelStream, Class<? extends ExcelValue> clazz) throws Exception {
+	public List<ExcelValue> parse(InputStream excelStream, Class<? extends ExcelValue> clazz) {
 		List<ExcelValue> excelValueList = new ArrayList<ExcelValue>();
-		POIFSFileSystem fileSystem = new POIFSFileSystem(excelStream);
-		HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
+		try {
+			POIFSFileSystem fileSystem = new POIFSFileSystem(excelStream);
+			HSSFWorkbook workbook = new HSSFWorkbook(fileSystem);
 
-		// sheet num count
-		int sheetNum = workbook.getNumberOfSheets();
+			// sheet num count
+			int sheetNum = workbook.getNumberOfSheets();
 
-		// for sheet
-		for (int i = 0; i < sheetNum; i++) {
-			String sheetName = workbook.getSheetName(i);
-			HSSFSheet hssfSheet = workbook.getSheetAt(i);
+			// for sheet
+			for (int i = 0; i < sheetNum; i++) {
+				String sheetName = workbook.getSheetName(i);
+				HSSFSheet hssfSheet = workbook.getSheetAt(i);
 
-			int rows = hssfSheet.getPhysicalNumberOfRows();
-			System.out.println("##parse## sheetName=" + sheetName + ", rows=" + rows);
+				int rows = hssfSheet.getPhysicalNumberOfRows();
+				System.out.println("##parse## sheetName=" + sheetName + ", rows=" + rows);
 
-			for (int j = 0; j < rows; j++) {
-				// excel header 데이터는 제외
-				if (j == ROW_HEADER_IDX) {
-					continue;
-				}
+				for (int j = 0; j < rows; j++) {
+					// excel header 데이터는 제외
+					if (j == ROW_HEADER_IDX) {
+						continue;
+					}
 
-				HSSFRow hssfRow = hssfSheet.getRow(j);
-				ExcelValue excelValue = clazz.newInstance();
+					HSSFRow hssfRow = hssfSheet.getRow(j);
+					ExcelValue excelValue;
+					excelValue = clazz.newInstance();
 
-				// row log
-				rowLog(hssfRow);
+					// row log
+					rowLog(hssfRow);
 
-				// cell 데이터 VO에 저장
-				excelValue = setCellValue(excelValue, excelValueList, hssfRow);
+					// cell 데이터 VO에 저장
+					excelValue = setCellValue(excelValue, excelValueList, hssfRow);
 
-				if (excelValue != null) {
-					excelValueList.add(excelValue); // add value
+					if (excelValue != null) {
+						excelValueList.add(excelValue); // add value
+					}
 				}
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		}
 
 		return excelValueList;
-
 	}
 
 	/**
@@ -100,7 +105,7 @@ public class ExcelParser {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private ExcelValue setCellValue(ExcelValue vo, List<ExcelValue> excelValueList, HSSFRow hssfRow) throws InstantiationException, IllegalAccessException {
+	private ExcelValue setCellValue(ExcelValue vo, List<ExcelValue> excelValueList, HSSFRow hssfRow) {
 		if (hssfRow != null) {
 			int cells = hssfRow.getPhysicalNumberOfCells();
 

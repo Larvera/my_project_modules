@@ -12,12 +12,16 @@ import com.kyu.excel.core.make.ExcelData;
  */
 public class JXLExcelGenerator extends AbstractExcelCore {
 
-	/* (non-Javadoc)
-	 * @see com.kyu.excel.core.ExcelCore#createWorkBook(com.kyu.excel.core.ExcelData, java.lang.String)
+	/**
+	 * <pre>
+	 * createWorkBook
+	 *
+	 * <pre>
+	 * @param data
+	 * @param excelFileName
 	 */
 	@Override
-	public void createWorkBook(ExcelData data, String excelFileName) throws Exception {
-		// TODO Auto-generated method stub
+	public void createWorkBook(ExcelData data, String excelFileName) {
 
 	}
 

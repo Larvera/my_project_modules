@@ -108,12 +108,13 @@ public class ExcelMappingVO implements ExcelData {
 		dinnerList.add(vo);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * <pre>
+	 * createExcelParamMap
 	 *
-	 * @see com.kyu.excel.core.make.ExcelData#createExcelParamMap()
+	 * <pre>
+	 * @return
 	 */
-	@Override
 	public Map<String, Object> createExcelParamMap() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("vo", this);

@@ -21,20 +21,30 @@ import com.kyu.excel.core.make.ExcelData;
  */
 public class JXLSExcelGenerator extends AbstractExcelCore {
 
-	/* (non-Javadoc)
-	 * @see com.kyu.excel.core.ExcelCore#createExcel(com.kyu.excel.core.ExcelData, com.kyu.excel.core.ExcelBaseType)
+	/**
+	 * <pre>
+	 * createWorkBook
+	 *
+	 * <pre>
+	 * @param data
+	 * @param excelFileName
 	 */
 	@Override
-	public void createWorkBook(ExcelData data, String excelFileName) throws Exception {
+	public void createWorkBook(ExcelData data, String excelFileName) {
 		XLSTransformer transformer = new XLSTransformer();
+		try {
+			// excel template read
+			String templateFilePath = getExcelTemplatePath(Conf.getValue("excel.template.path"), excelFileName);
+			InputStream is = new BufferedInputStream(new FileInputStream(templateFilePath));
 
-		// excel template read
-		String templateFilePath = getExcelTemplatePath(Conf.getValue("excel.template.path"), excelFileName);
-		InputStream is = new BufferedInputStream(new FileInputStream(templateFilePath));
+			// excel workbook 생성
+			Map<String, Object> paramMap = data.createExcelParamMap();
+			workbook = transformer.transformXLS(is, paramMap);
 
-		// excel workbook 생성
-		Map<String, Object> paramMap = data.createExcelParamMap();
-		workbook = transformer.transformXLS(is, paramMap);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.kyu.excel.core.make;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,7 +28,7 @@ public abstract class AbstractExcelCore implements ExcelCore {
 	 * 브라우저에서 엑셀 다운로드
 	 */
 	@Override
-	public void downloadExcel(HttpServletResponse response, String fileName) throws Exception {
+	public void downloadExcel(HttpServletResponse response, String fileName) {
 		BufferedOutputStream bf = null;
 		try {
 			response.setHeader("Content-disposition", "attachment;filename=" + encodeFileName(fileName));
@@ -36,6 +37,9 @@ public abstract class AbstractExcelCore implements ExcelCore {
 			workbook.write(bf);
 			bf.flush();
 
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		} finally {
 			if (bf != null) {
 				try {
@@ -47,15 +51,19 @@ public abstract class AbstractExcelCore implements ExcelCore {
 
 	/**
 	 * 엑셀 file write
+	 * @throws FileNotFoundException
 	 */
 	@Override
-	public void writeExcel(String savePath) throws Exception {
+	public void writeExcel(String savePath) {
 		BufferedOutputStream bf = null;
 		try {
 			bf = new BufferedOutputStream(new FileOutputStream(new File(savePath)));
 			workbook.write(bf);
 			bf.flush();
 
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		} finally {
 			if (bf != null) {
 				try {
@@ -74,12 +82,12 @@ public abstract class AbstractExcelCore implements ExcelCore {
 	 * @return
 	 * @throws Exception
 	 */
-	private String encodeFileName(String filename) throws Exception {
+	private String encodeFileName(String filename) {
 		try {
 			return URLEncoder.encode(filename, "UTF-8");
 		} catch (UnsupportedEncodingException ex) {
 			ex.printStackTrace();
-			throw ex;
+			throw new RuntimeException(ex);
 		}
 	}
 }

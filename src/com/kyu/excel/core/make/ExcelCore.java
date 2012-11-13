@@ -20,7 +20,7 @@ public interface ExcelCore {
 	 * @param excelFileName
 	 * @throws Exception
 	 */
-	public void createWorkBook(ExcelData data, String excelFileName) throws Exception;
+	public void createWorkBook(ExcelData data, String excelFileName);
 
 	/**
 	 * <pre>
@@ -31,7 +31,7 @@ public interface ExcelCore {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public void downloadExcel(HttpServletResponse response, String fileName) throws Exception;
+	public void downloadExcel(HttpServletResponse response, String fileName);
 
 	/**
 	 * <pre>
@@ -41,6 +41,6 @@ public interface ExcelCore {
 	 * @param savePath
 	 * @throws Exception
 	 */
-	public void writeExcel(String savePath) throws Exception;
+	public void writeExcel(String savePath);
 
 }
