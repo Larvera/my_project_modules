@@ -20,17 +20,18 @@ public class DownloadServlet extends HttpServlet {
 	/**  */
 	private static final long serialVersionUID = -2852621483949203650L;
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * <pre>
+	 * service
+	 *
+	 * <pre>
+	 * @param request
+	 * @param response
 	 */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) {
 		String filePath = "E:\\test\\download\\한글.jpg";
-		try {
-			DownloadHelper downloadHelper = new DownloadHelper();
-			downloadHelper.downloadFile(request, response, filePath);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		DownloadHelper downloadHelper = new DownloadHelper();
+		downloadHelper.downloadFile(request, response, filePath);
 	}
 }

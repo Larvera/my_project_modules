@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$("#checkBtn").click(function() {
+			var isOk = checkFormData("adsForm");
+			if (isOk == false) {
+				alert("입력 하시오.")
+			}
+		});
+	});
+
+	var config = {
+		"color" : "yellow",
+		"defaultColor" : "white",
+		"timer" : "2000"
+	};
+
+	// form validation check
+	function checkFormData(formId) {
+		var isOk = true;
+
+		// selectbox 검증
+		$("#" + formId + " select:visible").each(function(idx) {
+			isOk = validForm(this, idx);
+		});
+
+		// input type text 검증
+		$("#" + formId + " input[type=text]:visible").each(function(idx) {
+			isOk = validForm(this, idx);
+		});
+
+		// checkbox 검증
+		$("#" + formId + " input[type=checkbox]:visible").each(function(idx) {
+			isOk = validCheckboxForm(this, idx);
+		});
+
+		return isOk;
+	}
+
+	// validation checkbox form
+	function validCheckboxForm(element, idx) {
+		var isOk = true;
+		var checked = $(element).is(":checked");
+		if (checked == false) {
+			if (idx == 0) {
+				element.focus(); // 입력안된 첫번째 항목에 포커스 설정
+			}
+
+			isOk = false;
+			$(element).prev("span").css("background-color", config.color);
+
+			setTimeout(function() {
+				$(element).prev("span").css("background-color", config.defaultColor);
+			}, config.timer);
+		}
+
+		return isOk;
+	}
+
+	// validation form
+	function validForm(element, idx) {
+		var isOk = true;
+		var txtVal = $(element).val();
+		if (txtVal == "" || txtVal.length == 0) {
+			if (idx == 0) {
+				element.focus(); // 입력안된 첫번째 항목에 포커스 설정
+			}
+
+			isOk = false;
+			$(element).css("background-color", config.color);
+
+			setTimeout(function() {
+				$(element).css("background-color", config.defaultColor);
+			}, config.timer);
+		}
+
+		return isOk;
+	}
+</script>
+</head>
+<body>
+
+	<form id="adsForm">
+
+		<div>
+			<p>userId : <input type="text" id="userId" /></p>
+			<p>password : <input type="text" id="pw" /></p>
+			<p>cellPhone : <input type="text" id="phone1" />-<input type="text" id="phone2" />-<input type="text" id="phone3" /></p>
+		</div>
+
+		<select id="selectId">
+			<option value="">전체</option>
+			<option value="A1">A1</option>
+			<option value="B1">B1</option>
+			<option value="C1">C1</option>
+		</select>
+
+		<p>
+			radio1 : <input type="radio" name="radio1" value="A" />&nbsp;
+			radio2 : <input type="radio" name="radio2" value="B" />
+		</p>
+
+		<p>
+			<span>check1 :</span><input type="checkbox" name="checkbox1" value="C" />&nbsp;
+			<span>check2 :</span><input type="checkbox" name="checkbox2" value="D" />
+		</p>
+
+		<div>
+			<input type="button" id="checkBtn" value="checkForm">
+		</div>
+
+	</form>
+
+</body>
+</html>

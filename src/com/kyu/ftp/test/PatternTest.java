@@ -1,7 +1,12 @@
 package com.kyu.ftp.test;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.junit.Test;
 
 
 /**
@@ -13,10 +18,12 @@ import java.util.regex.Pattern;
  */
 public class PatternTest {
 
-	public static void main(String[] args) {
+	@Test
+	public void file패턴매치테스트() {
 		Pattern p = Pattern.compile("tad_daily.+20120425.csv");
 		Matcher m = p.matcher("tad_daily_age_20120425.csv");
 		boolean b = m.matches();
-		System.out.println(b);
+
+		assertThat(b, is(true));
 	}
 }

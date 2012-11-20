@@ -34,7 +34,7 @@ public class TableSchema {
 	/** 테이블 리스트 추출 SQL ID */
 	private final String QUERY_ID_TABLE_LIST = "tableList";
 	/** 스키마 */
-	private final String SCHEMA_NAME = "TAD";
+	private final String SCHEMA_NAME = "STG_TAD_LOG";
 
 	/**
 	 * <pre>

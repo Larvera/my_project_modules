@@ -33,7 +33,7 @@ public class DownloadHelper {
 	 * @param filePath
 	 * @throws Exception
 	 */
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response, String filePath) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, String filePath) {
 		FileInputStream fileInputStream = null;
 		BufferedInputStream bufferedInputStream = null;
 		BufferedOutputStream bufferedOutputStream = null;
@@ -56,9 +56,9 @@ public class DownloadHelper {
 				bufferedOutputStream.write(buffer, 0, read);
 			}
 
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			ex.printStackTrace();
-			throw ex;
+			throw new RuntimeException(ex);
 		} finally {
 			close(bufferedInputStream);
 			close(bufferedOutputStream);
@@ -74,7 +74,7 @@ public class DownloadHelper {
 	 * @param file
 	 * @throws UnsupportedEncodingException
 	 */
-	private void setResponseHeader(HttpServletRequest request, HttpServletResponse response, File file) throws Exception {
+	private void setResponseHeader(HttpServletRequest request, HttpServletResponse response, File file) {
 		int fileLength = (int) file.length();
 		String fileName = file.getName();
 		String mimeType = getMimeType(request, file);
@@ -114,8 +114,13 @@ public class DownloadHelper {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	private String encodeFileName(String filename) throws UnsupportedEncodingException {
-		return URLEncoder.encode(filename, CHARSET);
+	private String encodeFileName(String filename) {
+		try {
+			return URLEncoder.encode(filename, CHARSET);
+		} catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/**

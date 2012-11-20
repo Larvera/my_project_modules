@@ -41,11 +41,16 @@
 	// text area 숨김
 	function hideExclude(excludeId) {
 		$("#changeTextArea").children().each(function() {
-			$(this).hide();
+			//$(this).hide("1000", callbackTest);
+			$(this).fadeOut("slow", callbackTest);
 		});
 
 		// 파라미터로 넘겨 받은 id 요소는 show
-		$("#" + excludeId).show();
+		$("#" + excludeId).fadeIn("slow");
+	}
+
+	function callbackTest() {
+		//alert("callback!!");
 	}
 
 </script>
