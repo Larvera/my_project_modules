@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script>
+
+	$(document).ready(function() {
+
+		elementsDisabled(true);
+
+		setTimeout(function() {
+			elementsDisabled(false); // 2초 뒤에 실행
+		}, 2000);
+
+	});
+
+	// field enabled, disabled 전환
+	function elementsDisabled(disabled) {
+		var elementArr = ["input", "select"];
+
+		$(elementArr).each(function(idx, element) {
+			$("#adsForm " + element + ":visible").each(function() {
+				$(this).attr("disabled", disabled);
+			});
+		})
+
+		// 예외 항목
+		$("#userId").attr("disabled", false);
+	}
+
+</script>
+</head>
+<body>
+
+	<form id="adsForm">
+
+		<div>
+			<p>userId : <input type="text" id="userId" value="namkyu" /></p>
+			<p>userName : <input type="text" id="userName" value="규" /></p>
+			<p>cellPhone : <input type="text" id="phone1" value="" />-<input type="text" id="phone2" value="" />-<input type="text" id="phone3" value="" /></p>
+		</div>
+
+		<select id="selectId">
+			<option value="">전체</option>
+			<option value="A1">A1</option>
+			<option value="B1">B1</option>
+			<option value="C1">C1</option>
+		</select>
+
+		<p>
+			radio1 : <input type="radio" name="radio1" value="A" />&nbsp;
+			radio2 : <input type="radio" name="radio1" value="B" />
+		</p>
+
+		<p>
+			<span>check1 :</span><input type="checkbox" name="checkbox1" value="C" />&nbsp;
+			<span>check2 :</span><input type="checkbox" name="checkbox2" value="D" />
+		</p>
+
+		<div>
+			<input type="button" id="checkBtn" value="checkForm">
+		</div>
+
+	</form>
+
+</body>
+</html>
