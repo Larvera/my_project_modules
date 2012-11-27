@@ -22,6 +22,16 @@ public class ExcelParser {
 	/** excel row header idx */
 	private final int ROW_HEADER_IDX = 0;
 
+	/** 파싱된 excel 데이터 저장 class */
+	private final Class<? extends ExcelValue> clazz;
+
+	/**
+	 * @param clazz
+	 */
+	public ExcelParser(Class<? extends ExcelValue> clazz) {
+		this.clazz = clazz;
+	}
+
 	/**
 	 * <pre>
 	 * parse
@@ -32,7 +42,7 @@ public class ExcelParser {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ExcelValue> parse(InputStream excelStream, Class<? extends ExcelValue> clazz) {
+	public List<ExcelValue> parse(InputStream excelStream) {
 		List<ExcelValue> excelValueList = new ArrayList<ExcelValue>();
 		try {
 			POIFSFileSystem fileSystem = new POIFSFileSystem(excelStream);
@@ -56,14 +66,12 @@ public class ExcelParser {
 					}
 
 					HSSFRow hssfRow = hssfSheet.getRow(j);
-					ExcelValue excelValue;
-					excelValue = clazz.newInstance();
 
 					// row log
 					rowLog(hssfRow);
 
 					// cell 데이터 VO에 저장
-					excelValue = setCellValue(excelValue, excelValueList, hssfRow);
+					ExcelValue excelValue = setCellValue(hssfRow);
 
 					if (excelValue != null) {
 						excelValueList.add(excelValue); // add value
@@ -105,7 +113,9 @@ public class ExcelParser {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private ExcelValue setCellValue(ExcelValue vo, List<ExcelValue> excelValueList, HSSFRow hssfRow) {
+	private ExcelValue setCellValue(HSSFRow hssfRow) throws InstantiationException, IllegalAccessException {
+		ExcelValue excelValue = null;
+
 		if (hssfRow != null) {
 			int cells = hssfRow.getPhysicalNumberOfCells();
 
@@ -115,18 +125,19 @@ public class ExcelParser {
 				if (cell != null) {
 					String value = getCellData(cell);
 					int columnIdx = cell.getColumnIndex();
-					if (value == null) {
+					if (value == null || "".equals(value)) {
 						return null;
 					}
 
 					// set value
-					vo.setValue(columnIdx, value);
+					excelValue = clazz.newInstance();
+					excelValue.setValue(columnIdx, value.trim());
 					System.out.println("##setCellValue## columnIdx=" + columnIdx + ", value=" + value + ", cellType=" + cell.getCellType());
 				}
 			}
 
 		}
-		return vo;
+		return excelValue;
 	}
 
 	/**

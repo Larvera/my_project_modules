@@ -94,8 +94,8 @@ public class ExcelHandler {
 	 * @throws Exception
 	 */
 	public static List<ExcelValue> parse(InputStream excelStream, Class<? extends ExcelValue> clazz) {
-		ExcelParser parser = new ExcelParser();
-		List<ExcelValue> excelValueList = parser.parse(excelStream, clazz);
+		ExcelParser parser = new ExcelParser(clazz);
+		List<ExcelValue> excelValueList = parser.parse(excelStream);
 		return excelValueList;
 	}
 }
