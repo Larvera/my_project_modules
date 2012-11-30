@@ -114,29 +114,24 @@ public class ExcelParser {
 	 * @throws IllegalAccessException
 	 */
 	private ExcelValue setCellValue(HSSFRow hssfRow) throws InstantiationException, IllegalAccessException {
-		ExcelValue excelValue = null;
+		ExcelValue excelValue = clazz.newInstance();
+		int cells = hssfRow.getPhysicalNumberOfCells();
 
-		if (hssfRow != null) {
-			int cells = hssfRow.getPhysicalNumberOfCells();
-
-			// for cells
-			for (int i = 0; i < cells; i++) {
-				HSSFCell cell = hssfRow.getCell(i);
-				if (cell != null) {
-					String value = getCellData(cell);
-					int columnIdx = cell.getColumnIndex();
-					if (value == null || "".equals(value)) {
-						return null;
-					}
-
-					// set value
-					excelValue = clazz.newInstance();
-					excelValue.setValue(columnIdx, value.trim());
-					System.out.println("##setCellValue## columnIdx=" + columnIdx + ", value=" + value + ", cellType=" + cell.getCellType());
+		// for cells
+		for (int i = 0; i < cells; i++) {
+			HSSFCell cell = hssfRow.getCell(i);
+			if (cell != null) {
+				String value = getCellData(cell);
+				int columnIdx = cell.getColumnIndex();
+				if (value == null || "".equals(value)) {
+					return null;
 				}
-			}
 
+				excelValue.setValue(columnIdx, value.trim());
+				System.out.println("##setCellValue## columnIdx=" + columnIdx + ", value=" + value + ", cellType=" + cell.getCellType());
+			}
 		}
+
 		return excelValue;
 	}
 
