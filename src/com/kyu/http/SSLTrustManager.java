@@ -48,7 +48,7 @@ public class SSLTrustManager implements TrustManager, X509TrustManager {
 	 */
 	@Override
 	public X509Certificate[] getAcceptedIssuers() {
-		return null;
+		return new X509Certificate[0];
 	}
 
 	/*
@@ -61,30 +61,6 @@ public class SSLTrustManager implements TrustManager, X509TrustManager {
 	@Override
 	public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
 		System.out.println("##checkServerTrusted## authType=" + certs[0]);
-
-//		try {
-//
-//			// Get trust store
-//			KeyStore trustStore = KeyStore.getInstance("JKS");
-//			String cacertPath = System.getProperty("java.home") + "/lib/security/cacerts";
-//			trustStore.load(new FileInputStream(cacertPath), "changeit".toCharArray());
-//
-//			// Get Trust Manager
-//			TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-//			tmf.init(trustStore);
-//			TrustManager[] tms = tmf.getTrustManagers();
-//			((X509TrustManager) tms[0]).checkServerTrusted(certs, authType);
-//
-//		} catch (KeyStoreException e) {
-//			e.printStackTrace();
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-
 		return;
 	}
 

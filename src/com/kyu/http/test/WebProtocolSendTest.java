@@ -55,7 +55,6 @@ public class WebProtocolSendTest {
 
 //		String url = "http://220.103.245.206:8001";
 		String url = "https://220.103.245.206:8443";
-//		String url = "https://admin.t-ad.co.kr:8443/apoc/report/adReportList.do";
 
 		data.setRequestUrl(url);
 		data.setRequestContentType("application/xml");
