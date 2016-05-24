@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+
+	function test (gameId, gameName) {
+		alert("gameId=" + gameId + ", gameName=" + gameName);
+	}
+
+
+</script>
+
+</head>
+<body>
+	<a href="javascript:test('42')">인자 한 개 넘기기</a>
+	<a href="javascript:test('42', 'bns')">인자 두 개 넘기기</a>
+	<a href="javascript:test('42', 'bns', 'test')">인자 세개 넘기기</a>
+</body>
+</html>
