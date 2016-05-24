@@ -367,5 +367,8 @@ public class DateUtil {
 	public static void main(String[] args) {
 		String date = getDayInterval("2012-02-02", "yyyy-MM-dd", -1);
 		System.out.println(date);
+
+		System.out.println(getCurrentDate("MM/dd"));
+		System.out.println(addDayStr(6, "MM/dd"));
 	}
 }

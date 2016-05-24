@@ -1,6 +1,5 @@
 package com.kyu.ftp;
 
-import com.kyu.common.Conf;
 
 /**
  * @FileName : Main.java
@@ -35,10 +34,10 @@ public class Main {
 	 * @throws Exception
 	 */
 	public void start() throws Exception {
-		Conf.init();
+//		Conf.init();
 		handler = new FTPHandler();
 
-		String test = "UD";
+		String test = "D";
 
 		if ("D".equals(test)) { // 다운로드
 			download();
@@ -57,9 +56,9 @@ public class Main {
 	 */
 	public void download() {
 		FTPVO ftpvo = new FTPVO();
-		ftpvo.setDownloadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setDownloadRemoteDirectory("/home/administrator/test/ftp_test");
 		ftpvo.setDownloadLocalFileDirectory("E:\\test\\ftp\\download");
-		ftpvo.setDownloadFilePattern("tad_daily.+20120425.csv");
+		ftpvo.setDownloadFilePattern("a.*.txt");
 		ftpvo.setType(FTPType.GET);
 		handler.job(ftpvo);
 	}
@@ -72,9 +71,9 @@ public class Main {
 	 */
 	public void upload() {
 		FTPVO ftpvo = new FTPVO();
-		ftpvo.setUploadRemoteDirectory("/svc/tad/ftp");
+		ftpvo.setUploadRemoteDirectory("/home/administrator/test/ftp_test");
 		ftpvo.setUploadLocalDirectory("E:\\test\\ftp");
-		ftpvo.setUploadFilePattern("tad_daily.+20120425.csv");
+		ftpvo.setUploadFilePattern("a.*.txt");
 		ftpvo.setType(FTPType.PUT);
 		handler.job(ftpvo);
 	}

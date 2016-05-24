@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.kyu.common.Conf;
-
 /**
  * @FileName : FTPHandler.java
  * @Project : sample_project
@@ -36,8 +34,10 @@ public class FTPHandler {
 	public boolean job(FTPVO ftpvo) {
 		boolean isSuccess = false;
 		try {
-			ftp.connect(Conf.getValue("ftp.remote.ip"), Conf.getIntValue("ftp.remote.port"));
-			ftp.login(Conf.getValue("ftp.remote.user"), Conf.getValue("ftp.remote.password"));
+//			ftp.connect(Conf.getValue("ftp.remote.ip"), Conf.getIntValue("ftp.remote.port"));
+//			ftp.login(Conf.getValue("ftp.remote.user"), Conf.getValue("ftp.remote.password"));
+			ftp.connect("172.20.53.155", 21);
+			ftp.login("administrator", "ncsoft2186!");
 
 			FTPType type = ftpvo.getType();
 
