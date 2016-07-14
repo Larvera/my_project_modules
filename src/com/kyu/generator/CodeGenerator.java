@@ -26,14 +26,14 @@ public class CodeGenerator {
 	 * @param tableRowList
 	 * @return
 	 */
-	public String createCode(List<TableRowVO> tableRowList) {
+	public String createCode(List<TableDictionaryRowVO> tableRowList) {
 		StringBuilder code = new StringBuilder();
 		code.append("public class ");
 		className = tableRowList.get(0).getTableName();
 		code.append(className + " { \n");
 
 		// member field 생성
-		for (TableRowVO rowVO : tableRowList) {
+		for (TableDictionaryRowVO rowVO : tableRowList) {
 			String dataType = getDataType(rowVO.getDataType());
 			String columnName = rowVO.getColumn().toLowerCase();
 			String chnageColumnName = changeColumnName(columnName);
@@ -49,7 +49,7 @@ public class CodeGenerator {
 		code.append("\n ");
 
 		// setter, getter 생성
-		for (TableRowVO rowVO : tableRowList) {
+		for (TableDictionaryRowVO rowVO : tableRowList) {
 			String dataType = getDataType(rowVO.getDataType());
 			String columnName = rowVO.getColumn().toLowerCase();
 			String changeColumnName = changeColumnName(columnName);

@@ -8,7 +8,7 @@ package com.kyu.generator;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-public class TableRowVO {
+public class TableDictionaryRowVO {
 
 	/** 테이블 명 */
 	private String tableName;

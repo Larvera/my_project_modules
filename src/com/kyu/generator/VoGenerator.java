@@ -1,11 +1,12 @@
 package com.kyu.generator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kyu.common.Conf;
+import com.kyu.generator.db.DBInfo;
 import com.kyu.generator.db.DBType;
 
 
@@ -27,8 +28,6 @@ public class VoGenerator {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		Conf.init();
-
 		VoGenerator generator = new VoGenerator();
 		generator.job();
 	}
@@ -44,9 +43,15 @@ public class VoGenerator {
 		// param 셋팅
 		Map<String, List<String>> paramMap = makeTableNames();
 
+		DBInfo dbInfo = new DBInfo();
+		dbInfo.setDbType(DBType.MYSQL);
+		dbInfo.setJdbcUrl("");
+		dbInfo.setId("");
+		dbInfo.setPw("");
+
 		// table 리스트 추출
 		TableDictionary dictionary = new TableDictionary();
-		List<TableRowVO> tableRowList = dictionary.getTableList(paramMap, DBType.MYSQL);
+		List<TableDictionaryRowVO> tableRowList = dictionary.getTableList(paramMap, dbInfo);
 
 		// table 정보 추출
 		CodeGenerator code = new CodeGenerator();
@@ -54,7 +59,7 @@ public class VoGenerator {
 
 		// VO 파일 생성
 		String javaFileName = code.getClassName();
-		new VoFileCreator().createFile(generatorVO, javaFileName);
+		new FileCreator().createFile(generatorVO, javaFileName, ".java");
 
 		System.out.println("##job## (Finished VO File) javaFileName=" + javaFileName);
 	}
@@ -78,6 +83,7 @@ public class VoGenerator {
 		schemaNames.add("TAD");
 		schemaNames.add("TAD_LOG");
 
+		paramMap.put("databaseInfo", Arrays.asList("localhost", "test", "1111"));
 		paramMap.put("tableName", tableNames);
 		paramMap.put("schemaName", schemaNames);
 		return paramMap;

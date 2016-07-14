@@ -20,6 +20,6 @@ public interface Database {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Connection getConnection();
+	public Connection getConnection(String jdbcUrl, String userId, String password);
 
 }

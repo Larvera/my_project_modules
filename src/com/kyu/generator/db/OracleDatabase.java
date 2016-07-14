@@ -11,14 +11,11 @@ import java.sql.Connection;
  */
 public class OracleDatabase implements Database {
 
-	public OracleDatabase() {
-	}
-
 	/* (non-Javadoc)
 	 * @see com.kyu.generator.db.Database#getConnection()
 	 */
 	@Override
-	public Connection getConnection() {
+	public Connection getConnection(String jdbcUrl, String userId, String password) {
 		Connection conn = null;
 		return conn;
 	}

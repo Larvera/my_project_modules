@@ -12,29 +12,27 @@ import java.io.IOException;
  * @작성자 : 이남규
  * @프로그램설명 :
  */
-public class VoFileCreator {
+public class FileCreator {
 
 	/** root directory */
 	private final String rootPath = "C:/";
-	/** 파일 이름 */
-	private String fileName;
 
 	/**
 	 * <pre>
 	 * createFile
 	 * VO 파일 생성
 	 * <pre>
-	 * @param generatorVO
-	 * @param tableName
+	 * @param data
+	 * @param name
 	 */
-	public void createFile(String generatorVO, String tableName) {
-		fileName = tableName + ".java";
+	public void createFile(String data, String name, String suffix) {
+		String fileName = name + suffix;
 		BufferedWriter bw = null;
 		try {
 			File file = new File(rootPath, fileName);
 			bw = new BufferedWriter(new FileWriter(file));
 
-			bw.write(generatorVO);
+			bw.write(data);
 			bw.flush();
 
 		} catch (IOException ex) {

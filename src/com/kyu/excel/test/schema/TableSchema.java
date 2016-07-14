@@ -11,10 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.kyu.common.Conf;
 import com.kyu.excel.ExcelHandler;
 import com.kyu.excel.enumtype.ExcelBaseType;
 import com.kyu.excel.generator.JXLSExcelGenerator;
+import com.kyu.generator.db.DBInfo;
 import com.kyu.generator.db.DBType;
 import com.kyu.generator.db.Database;
 import com.kyu.generator.db.DatabaseFactory;
@@ -45,8 +45,6 @@ public class TableSchema {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		Conf.init();
-
 		TableSchema tableSchema = new TableSchema();
 		tableSchema.job();
 	}
@@ -60,8 +58,14 @@ public class TableSchema {
 	public void job() {
 		Map<String, String> paramMap = makeParam();
 
+		DBInfo dbInfo = new DBInfo();
+		dbInfo.setDbType(DBType.MYSQL);
+		dbInfo.setJdbcUrl("");
+		dbInfo.setId("");
+		dbInfo.setPw("");
+
 		// 스키마 정보 추출
-		SchemaVO data = getSchema(paramMap, DBType.MYSQL);
+		SchemaVO data = getSchema(paramMap, dbInfo);
 
 		JXLSExcelGenerator excelGenerator = new JXLSExcelGenerator();
 		boolean isSuccess = ExcelHandler.createExcel(data, excelGenerator, ExcelBaseType.DB_SCHEMA);
@@ -77,7 +81,7 @@ public class TableSchema {
 	 * @param dbType
 	 * @return
 	 */
-	public SchemaVO getSchema(Map<String, String> paramMap, DBType dbType) {
+	public SchemaVO getSchema(Map<String, String> paramMap, DBInfo dbInfo) {
 		Connection conn = null;
 		ResultSet tableResultSet = null;
 		ResultSet columnResultSet = null;
@@ -87,8 +91,8 @@ public class TableSchema {
 		List<TableVO> tableList = new ArrayList<TableVO>();
 
 		try {
-			Database database = DatabaseFactory.createInstance(dbType);
-			conn = database.getConnection();
+			Database database = DatabaseFactory.createInstance(dbInfo.getDbType());
+			conn = database.getConnection(dbInfo.getJdbcUrl(), dbInfo.getId(), dbInfo.getPw());
 
 			if (conn != null) {
 				// 테이블 데이터 추출

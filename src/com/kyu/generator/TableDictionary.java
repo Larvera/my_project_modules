@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.kyu.generator.db.DBType;
+import com.kyu.generator.db.DBInfo;
 import com.kyu.generator.db.Database;
 import com.kyu.generator.db.DatabaseFactory;
 import com.kyu.generator.db.QueryLoad;
@@ -25,26 +25,26 @@ public class TableDictionary {
 	 * @param tableNames
 	 * @return
 	 */
-	public List<TableRowVO> getTableList(Map<String, List<String>> paramMap, DBType dbType) {
+	public List<TableDictionaryRowVO> getTableList(Map<String, List<String>> paramMap, DBInfo dbInfo) {
 		Connection conn = null;
 		ResultSet resultSet = null;
 		PreparedStatement pstmt = null;
-		List<TableRowVO> tableRowList = new ArrayList<TableRowVO>();
+		List<TableDictionaryRowVO> tableRowList = new ArrayList<TableDictionaryRowVO>();
 
 		try {
-			Database database = DatabaseFactory.createInstance(dbType);
-			conn = database.getConnection();
+			Database database = DatabaseFactory.createInstance(dbInfo.getDbType());
+			conn = database.getConnection(dbInfo.getJdbcUrl(), dbInfo.getId(), dbInfo.getPw());
 
 			if (conn != null) {
 				QueryLoad queryLoad = new QueryLoad();
-				String sql = queryLoad.getQuery(dbType.getQueryId());
+				String sql = queryLoad.getQuery(dbInfo.getDbType().getQueryId());
 
 				String resultQuery = paramMapping(paramMap, sql);
 				pstmt = conn.prepareStatement(resultQuery);
 				resultSet = pstmt.executeQuery();
 
 				while (resultSet.next()) {
-					TableRowVO rowVO = new TableRowVO();
+					TableDictionaryRowVO rowVO = new TableDictionaryRowVO();
 
 					rowVO.setTableComment(resultSet.getString(1));
 					rowVO.setTableName(resultSet.getString(2));
